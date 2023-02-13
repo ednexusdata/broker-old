@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>a41a6d6b-c504-4749-96e2-d8b4a84529c4</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Identity.Web" Version="1.16.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="6.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" version="7.0.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.*" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+	  <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Autofac" Version="6.5.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OregonNexus.Broker.Domain\OregonNexus.Broker.Domain.csproj" />
+    <ProjectReference Include="..\OregonNexus.Broker.Data\OregonNexus.Broker.Data.csproj" />
+    <ProjectReference Include="..\OregonNexus.Broker.Data.Migrations.PostgreSQL\OregonNexus.Broker.Data.Migrations.PostgreSQL.csproj" />
+  </ItemGroup>
+
+</Project>

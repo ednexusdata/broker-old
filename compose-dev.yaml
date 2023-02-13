@@ -1,0 +1,151 @@
+version: "3.7"
+services:
+  backend:
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    container_name: broker-dev
+    volumes:
+      - app:/app
+      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets
+    depends_on:
+      - db
+    ports:
+      - "8030:80"
+      - "8031:443"
+    environment:
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    entrypoint:
+      - sleep
+      - infinity
+  db:
+    container_name: broker-postgres
+    image: postgres:latest
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=broker
+      - POSTGRES_PASSWORD=broker
+      - POSTGRES_DB=broker
+    ports:
+      - "8000:5432"
+    restart: always
+  edfi-admin:
+    image: edfialliance/ods-api-web-sandbox-admin:v2.2
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_PORT: "5432"
+      ADMIN_USER: "admin@example.com"
+      ADMIN_PASSWORD: "Admin1"
+      MINIMAL_KEY: "minimal"
+      MINIMAL_SECRET: "minimalSecret"
+      POPULATED_KEY: "populated"
+      POPULATED_SECRET: "populatedSecret"
+      ODS_POSTGRES_HOST: edfi-db-ods
+      ADMIN_POSTGRES_HOST: edfi-db-admin
+      PathBase: "admin"
+      OAuthUrl: "http://localhost/api/oauth/"
+      SANDBOX_HEALTHCHECK_TEST: "curl -f http://localhost/health"
+    volumes:
+      - /Users/makoa/Projects/oregonnexus/tmp/logs:/app/logs
+    depends_on:
+      - edfi-db-admin
+    ports:
+      - "8021:80"
+    restart: always
+    hostname: admin
+    container_name: edfi-admin
+    healthcheck:
+      test: "curl -f http://localhost/health"
+      start_period: "60s"
+      retries: 3
+  edfi-ods-api:
+    image: edfialliance/ods-api-web-api:v2.2
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_PORT: "5432"
+      API_MODE: "Sandbox"
+      ODS_POSTGRES_HOST: edfi-db-ods
+      ADMIN_POSTGRES_HOST: edfi-db-admin
+      ApiSettings__PathBase: "api"
+      TPDM_ENABLED: "true"
+      API_HEALTHCHECK_TEST: "curl -f http://localhost/health"
+    volumes:
+      - /Users/makoa/Projects/oregonnexus/tmp/logs:/app/logs
+    depends_on:
+      - edfi-admin
+      - edfi-db-admin
+    restart: always
+    ports:
+      - "8022:80"
+    hostname: api
+    container_name: edfi-ods-api
+    healthcheck:
+      test: "curl -f http://localhost/health"
+      start_period: "60s"
+      retries: 3
+
+  edfi-db-ods:
+    image: edfialliance/ods-api-db-sandbox:v2.2
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      TPDM_ENABLED: "true"
+    volumes:
+      - vol-db-ods:/var/lib/postgresql/data
+    ports:
+      - "8001:5432"
+    restart: always
+    container_name: edfi-db-ods
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready  -U postgres"]
+      start_period: "60s"
+      retries: 3
+
+  edfi-db-admin:
+    image: edfialliance/ods-api-db-admin:v2.2
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      API_MODE: "Sandbox"
+    ports:
+      - "8002:5432"
+    volumes:
+      - vol-db-admin:/var/lib/postgresql/data
+    restart: always
+    container_name: edfi-db-admin
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready  -U postgres"]
+      start_period: "60s"
+      retries: 3
+
+  edfi-swagger:
+    image: edfialliance/ods-api-web-swaggerui:v2.2
+    environment:
+      POPULATED_KEY: "populated"
+      POPULATED_SECRET: "populatedSecret"
+      WebApiVersionUrl: "http://localhost:8022/api/"
+      PathBase: "docs"
+      SWAGGER_HEALTHCHECK_TEST: "curl -f http://localhost/health"
+    ports:
+      - "8023:80"
+    depends_on:
+      - edfi-ods-api
+      - edfi-admin
+      - edfi-db-ods
+      - edfi-db-admin
+    restart: always
+    hostname: swagger
+    container_name: edfi-swagger
+    healthcheck:
+      test: "curl -f http://localhost/health"
+      start_period: "60s"
+      retries: 3
+volumes:
+  db-data: {}
+  app: {}
+  vol-db-ods: {}
+  vol-db-admin: {}
+networks:
+  default:
+    name: broker_default

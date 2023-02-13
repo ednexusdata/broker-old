@@ -1,0 +1,28 @@
+@{
+    // Copyright: 2023 Education Nexus Oregon
+    // Author: Makoa Jacobsen, makoa@makoajacobsen.com
+    ViewData["Title"] = "Login";
+}
+@using Microsoft.AspNetCore.Authentication
+@model IEnumerable<AuthenticationScheme>
+
+<div class="text-center">
+    <h2>Login to Broker</h2>
+    <ul>
+        @foreach(var i in Model)
+        {
+            <li>@i.Name | @i.DisplayName | @i.HandlerType</li>
+        }
+    </ul>
+
+    <form id="external-account" asp-action="ExternalLogin" method="post" class="form-horizontal">
+        <div>
+            <p>
+                @foreach (var provider in Model)
+                {
+                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                }
+            </p>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,107 @@
+@model List<OregonNexus.Broker.Web.Controllers.UsersController.CombinedUser>
+@using System.Text.Json
+@{
+    // Copyright: 2023 Education Nexus Oregon
+    // Author: Makoa Jacobsen, makoa@makoajacobsen.com
+    ViewData["Title"] = "Users";
+
+    var data = JsonSerializer.Serialize(Model);
+}
+
+<div class="text-center">
+    <h1 class="display-4">Users</h1>
+    <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-action="add">Add User</button></p>
+    <div id="data-table"></div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="user-form" method="post" asp-action="Update">
+      <div class="modal-body">
+          <div class="mb-3">
+            <label for="first-name" class="col-form-label">First Name:</label>
+            <input type="text" class="form-control" id="first-name" name="FirstName">
+          </div>
+          <div class="mb-3">
+            <label for="last-name" class="col-form-label">Last Name:</label>
+            <input type="text" class="form-control" id="last-name" name="LastName">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="col-form-label">Email:</label>
+            <input type="email" class="form-control" id="email" name="Email">
+          </div>
+          <div class="mb-3">
+            <input class="form-check-input" type="checkbox" value="true" id="super-admin" name="IsSuperAdmin">
+            <label class="form-check-label" for="super-admin">Super Admin</label>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="id" name="Id" />
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+    <script>
+    'use strict';
+
+    //define data
+    var tabledata = @Html.Raw(data);
+
+    //define table
+    var table = new Tabulator("#data-table", {
+        data: tabledata,
+        layout: "fitDataTable",
+        columns: [
+            {formatter:"rownum", hozAlign:"center", width:40},
+            {title:"ID", field:"ApplicationUser.Id"}, 
+            {title:"Last Name", field:"ApplicationUser.LastName"},
+            {title:"First Name", field:"ApplicationUser.FirstName"},
+            {title:"Email", field:"IdentityUser.Email"},
+            {title:"Super Admin", field:"ApplicationUser.IsSuperAdmin"}
+        ],
+    });
+
+    table.on("rowClick", function(e, row){
+        var selectedData = row.getData();
+
+        $('#first-name').val(selectedData.ApplicationUser.FirstName);
+        $('#last-name').val(selectedData.ApplicationUser.LastName);
+        $('#email').val(selectedData.IdentityUser.Email);
+        $('#id').val(selectedData.IdentityUser.Id);
+        $('#super-admin').prop("checked", selectedData.ApplicationUser.IsSuperAdmin);
+
+        $('#exampleModal').modal('show');
+
+        //alert("Row " + row.getData().IdentityUser.Id + " Clicked!!!!")
+    });
+
+    var exampleModal = document.getElementById('exampleModal');
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget
+        if (button) {
+            // Extract info from data-bs-* attributes
+            var action = button.getAttribute('data-bs-action')
+            // If necessary, you could initiate an AJAX request here
+            // and then do the updating in a callback.
+            //
+            // Update the modal's content.
+            if (action == "add") {
+                $('#id').val('');
+                $('#user-form')[0].reset();
+            }
+        }
+    });
+
+    </script>
+}

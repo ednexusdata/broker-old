@@ -7,6 +7,7 @@ using OregonNexus.Broker.Web.Models;
 using OregonNexus.Broker.Domain;
 using OregonNexus.Broker.SharedKernel;
 using Microsoft.AspNetCore.Authorization;
+using InertiaAdapter;
 
 namespace OregonNexus.Broker.Web.Controllers;
 
@@ -25,7 +26,12 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        //your js component file name.
+        var componentName = "Welcome";
+        //return whatever you want.
+        var data = new { Id = 1 };
+        //return Inertia Result.
+        return Inertia.Render(componentName, data);
     }
 
     public IActionResult Privacy()

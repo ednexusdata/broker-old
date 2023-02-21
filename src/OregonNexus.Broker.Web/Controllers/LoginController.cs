@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
+using OregonNexus.Broker.Domain;
 
 namespace OregonNexus.Broker.Web.Controllers;
 
@@ -41,8 +42,19 @@ public class LoginController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateFirstUser()
     {
-        var user = new IdentityUser<Guid> { UserName = "mjacobsen@clackesd.k12.or.us", Email = "mjacobsen@clackesd.k12.or.us" }; 
-        var result = await _userManager.CreateAsync(user);
+        var identityUser = new IdentityUser<Guid> { UserName = "mjacobsen@clackesd.k12.or.us", Email = "mjacobsen@clackesd.k12.or.us" }; 
+        var result = await _userManager.CreateAsync(identityUser);
+
+        var user = new User()
+        {
+            Id = identityUser.Id,
+            FirstName = "Makoa",
+            LastName = "Jacobsen",
+            IsSuperAdmin = true,
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Add(user);
+        await _db.SaveChangesAsync();
         
         return RedirectToAction("index");
     }

@@ -1,0 +1,19 @@
+@using InertiaAdapter
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inertia Aspnet Core React Example</title>
+    <link rel="stylesheet" href="/dist/style.css">
+</head>
+<body>
+    @Inertia.Html(Model)
+
+    <!-- reference your js file. -->
+    <script src="/dist/bundle.es.js"></script>
+</body>
+</html>

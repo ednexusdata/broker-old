@@ -9,6 +9,7 @@ using OregonNexus.Broker.SharedKernel;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using InertiaAdapter.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +86,7 @@ builder.Services.AddAuthentication()
 );
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddInertia();
 
 var app = builder.Build();
 
@@ -98,6 +100,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseInertia();
 
 app.UseRouting();
 

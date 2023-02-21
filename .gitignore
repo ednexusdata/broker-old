@@ -134,3 +134,7 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+
+# Node JS
+node_modules
+package-lock.json

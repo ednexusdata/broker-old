@@ -2,6 +2,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
+import { Link } from '@inertiajs/vue3'
 
 const user = {
   name: 'Tom Cook',
@@ -10,8 +11,8 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
+  { name: 'Home', href: '/Home/Index', current: true },
+  { name: 'Users', href: '/Users/Index', current: false },
   { name: 'Projects', href: '#', current: false },
   { name: 'Calendar', href: '#', current: false },
 ]
@@ -21,7 +22,7 @@ const userNavigation = [
   { name: 'Sign out', href: '#' },
 ]
 
-defineProps({ controller: Object })
+defineProps({ controller: Object, share: Object })
 
 const count = ref(0)
 </script>
@@ -66,7 +67,7 @@ const count = ref(0)
               <transition enter-active-class="transition ease-out duration-200" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                 <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                    <a :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
+                    <Link :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</Link>
                   </MenuItem>
                 </MenuItems>
               </transition>
@@ -118,7 +119,7 @@ const count = ref(0)
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <!-- Replace with your content -->
           <div class="px-4 py-8 sm:px-0">
-            <h1 class="text-3xl font-bold underline italic">{{ controller.id }}</h1>
+            <h1 class="text-3xl font-bold underline italic">{{ controller.id }} / {{ share.user.name }}</h1>
 
           <div class="card">
             <button type="button" @click="count++">count is {{ count }}</button>

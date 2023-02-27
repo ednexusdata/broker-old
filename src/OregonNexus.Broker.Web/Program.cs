@@ -10,6 +10,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using InertiaAdapter.Extensions;
+using OregonNexus.Broker.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,6 +108,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+
+app.UseInertiaShared();
 
 app.MapControllerRoute(
     name: "default",

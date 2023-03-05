@@ -1,0 +1,21 @@
+@model OregonNexus.Broker.Web.Controllers.UsersController.CombinedUser
+<form id="user-form" method="post" asp-action="Update">
+<div class="mb-3">
+<label for="first-name" class="col-form-label">First Name:</label>
+<input asp-for="ApplicationUser.FirstName" />
+</div>
+<div class="mb-3">
+<label for="last-name" class="col-form-label">Last Name:</label>
+<input asp-for="ApplicationUser.LastName" />
+</div>
+<div class="mb-3">
+<label for="email" class="col-form-label">Email:</label>
+<input asp-for="IdentityUser.Email" />
+</div>
+<div class="mb-3">
+<input asp-for="ApplicationUser.IsSuperAdmin" />
+<label class="form-check-label" for="super-admin">Super Admin</label>
+</div>
+<input type="hidden" id="id" name="Id" />
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>

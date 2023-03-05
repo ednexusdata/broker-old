@@ -41,6 +41,16 @@ public class UsersController : Controller
         return View(combinedUsers);
     }
 
+    public async Task<IActionResult> Edit(Guid Id)
+    {
+        var combinedUser = new CombinedUser();
+
+        combinedUser.IdentityUser = await _db.Users.Where(x => x.Id == Id).FirstOrDefaultAsync();
+        combinedUser.ApplicationUser = await _repo.GetByIdAsync(Id);
+
+        return View(combinedUser);
+    }
+
     public class CombinedUser
     {
         public IdentityUser<Guid>? IdentityUser { get; set; }

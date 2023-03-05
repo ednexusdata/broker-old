@@ -60,14 +60,19 @@
     //define table
     var table = new Tabulator("#data-table", {
         data: tabledata,
-        layout: "fitDataTable",
+        layout: "fitColumns",
         columns: [
             {formatter:"rownum", hozAlign:"center", width:40},
             {title:"ID", field:"ApplicationUser.Id"}, 
             {title:"Last Name", field:"ApplicationUser.LastName"},
             {title:"First Name", field:"ApplicationUser.FirstName"},
             {title:"Email", field:"IdentityUser.Email"},
-            {title:"Super Admin", field:"ApplicationUser.IsSuperAdmin"}
+            {title:"Super Admin", field:"ApplicationUser.IsSuperAdmin"},
+            {title:"Edit", field:"ApplicationUser.Id", formatter:"link", formatterParams:{
+    labelField:"Edit",
+    urlPrefix:"/Users/Edit/",
+    urlField:"ApplicationUser.Id"
+} }
         ],
     });
 

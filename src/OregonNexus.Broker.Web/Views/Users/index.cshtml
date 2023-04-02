@@ -4,109 +4,59 @@
     // Copyright: 2023 Education Nexus Oregon
     // Author: Makoa Jacobsen, makoa@makoajacobsen.com
     ViewData["Title"] = "Users";
-
-    var data = JsonSerializer.Serialize(Model);
+    Layout = "_AuthenticatedLayout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Users</h1>
-    <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-action="add">Add User</button></p>
-    <div id="data-table"></div>
-</div>
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-base font-semibold leading-6 text-gray-900">Users</h1>
+      <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name, title, email and role.</p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+      <button type="button" class="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Add user</button>
+    </div>
+  </div>
+  <div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Name</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Title</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role</th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
+                <span class="sr-only">Edit</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            <!-- Odd row -->
+            <tr>
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">Lindsay Walton</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Front-end Developer</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">lindsay.walton@example.com</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Member</td>
+              <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
+                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, Lindsay Walton</span></a>
+              </td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">Lindsay Walton</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Front-end Developer</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">lindsay.walton@example.com</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Member</td>
+              <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
+                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, Lindsay Walton</span></a>
+              </td>
+            </tr>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">User</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- More people... -->
+          </tbody>
+        </table>
       </div>
-      <form id="user-form" method="post" asp-action="Update">
-      <div class="modal-body">
-          <div class="mb-3">
-            <label for="first-name" class="col-form-label">First Name:</label>
-            <input type="text" class="form-control" id="first-name" name="FirstName">
-          </div>
-          <div class="mb-3">
-            <label for="last-name" class="col-form-label">Last Name:</label>
-            <input type="text" class="form-control" id="last-name" name="LastName">
-          </div>
-          <div class="mb-3">
-            <label for="email" class="col-form-label">Email:</label>
-            <input type="email" class="form-control" id="email" name="Email">
-          </div>
-          <div class="mb-3">
-            <input class="form-check-input" type="checkbox" value="true" id="super-admin" name="IsSuperAdmin">
-            <label class="form-check-label" for="super-admin">Super Admin</label>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <input type="hidden" id="id" name="Id" />
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-      </form>
     </div>
   </div>
 </div>
-
-@section Scripts {
-    <script>
-    'use strict';
-
-    //define data
-    var tabledata = @Html.Raw(data);
-
-    //define table
-    var table = new Tabulator("#data-table", {
-        data: tabledata,
-        layout: "fitColumns",
-        columns: [
-            {formatter:"rownum", hozAlign:"center", width:40},
-            {title:"ID", field:"ApplicationUser.Id"}, 
-            {title:"Last Name", field:"ApplicationUser.LastName"},
-            {title:"First Name", field:"ApplicationUser.FirstName"},
-            {title:"Email", field:"IdentityUser.Email"},
-            {title:"Super Admin", field:"ApplicationUser.IsSuperAdmin"},
-            {title:"Edit", field:"ApplicationUser.Id", formatter:"link", formatterParams:{
-    labelField:"Edit",
-    urlPrefix:"/Users/Edit/",
-    urlField:"ApplicationUser.Id"
-} }
-        ],
-    });
-
-    table.on("rowClick", function(e, row){
-        var selectedData = row.getData();
-
-        $('#first-name').val(selectedData.ApplicationUser.FirstName);
-        $('#last-name').val(selectedData.ApplicationUser.LastName);
-        $('#email').val(selectedData.IdentityUser.Email);
-        $('#id').val(selectedData.IdentityUser.Id);
-        $('#super-admin').prop("checked", selectedData.ApplicationUser.IsSuperAdmin);
-
-        $('#exampleModal').modal('show');
-
-        //alert("Row " + row.getData().IdentityUser.Id + " Clicked!!!!")
-    });
-
-    var exampleModal = document.getElementById('exampleModal');
-    exampleModal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        var button = event.relatedTarget
-        if (button) {
-            // Extract info from data-bs-* attributes
-            var action = button.getAttribute('data-bs-action')
-            // If necessary, you could initiate an AJAX request here
-            // and then do the updating in a callback.
-            //
-            // Update the modal's content.
-            if (action == "add") {
-                $('#id').val('');
-                $('#user-form')[0].reset();
-            }
-        }
-    });
-
-    </script>
-}

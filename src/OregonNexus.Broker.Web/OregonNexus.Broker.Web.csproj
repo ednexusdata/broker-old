@@ -31,4 +31,8 @@
     <ProjectReference Include="..\OregonNexus.Broker.Data.Migrations.PostgreSQL\OregonNexus.Broker.Data.Migrations.PostgreSQL.csproj" />
   </ItemGroup>
 
+  <Target Name="Tailwind" BeforeTargets="Build">
+    <Exec Command="npm run css:build"/>
+  </Target>
+
 </Project>

@@ -7,7 +7,7 @@
     Layout = "_AuthenticatedLayout";
 }
 
-<div class="px-4 sm:px-6 lg:px-8">
+<div class="">
   <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
       <h1 class="text-base font-semibold leading-6 text-gray-900">Users</h1>
@@ -18,42 +18,35 @@
     </div>
   </div>
   <div class="mt-8 flow-root">
-    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+    <div class="overflow-x-auto">
+      <div class="inline-block min-w-full py-2 align-middle">
         <table class="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
-              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Name</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Title</th>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Last Name</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">First Name</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Super Admin</th>
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
                 <span class="sr-only">Edit</span>
               </th>
             </tr>
           </thead>
           <tbody class="bg-white">
-            <!-- Odd row -->
-            <tr>
-              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">Lindsay Walton</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Front-end Developer</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">lindsay.walton@example.com</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Member</td>
+            @{ var even = true; }
+            @foreach(var combinedUser in Model)
+            {
+            <tr class="@(even ? "bg-gray-50": "")">
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@combinedUser?.ApplicationUser?.LastName</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@combinedUser?.ApplicationUser?.FirstName</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@combinedUser?.IdentityUser?.Email</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@combinedUser?.ApplicationUser?.IsSuperAdmin</td>
               <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
-                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, Lindsay Walton</span></a>
+                <a asp-action="Edit" asp-controller="Users" asp-route-id="@combinedUser?.IdentityUser?.Id" class="text-indigo-600 hover:text-indigo-900">Edit</a>
               </td>
             </tr>
-            <tr class="bg-gray-50">
-              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">Lindsay Walton</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Front-end Developer</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">lindsay.walton@example.com</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Member</td>
-              <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
-                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, Lindsay Walton</span></a>
-              </td>
-            </tr>
-
-            <!-- More people... -->
+            even = !even;
+            }
           </tbody>
         </table>
       </div>

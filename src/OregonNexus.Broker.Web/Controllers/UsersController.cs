@@ -41,6 +41,11 @@ public class UsersController : Controller
         return View(combinedUsers);
     }
 
+    public IActionResult Add()
+    {
+        return View();
+    }
+
     public async Task<IActionResult> Edit(Guid Id)
     {
         var combinedUser = new CombinedUser();

@@ -1,11 +1,10 @@
 @model OregonNexus.Broker.Web.Controllers.UsersController.CombinedUser
-<div class="space-y-12 sm:space-y-16">
     <div>
       <div class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
           <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">First name</label>
           <div class="mt-2 sm:col-span-2 sm:mt-0">
-            <input asp-for="ApplicationUser.FirstName" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+            <input asp-for="ApplicationUser.FirstName" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
           </div>
         </div>
 
@@ -26,12 +25,11 @@
         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
           <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Super User</label>
           <div class="mt-2 sm:col-span-2 sm:mt-0">
-            <input asp-for="ApplicationUser.IsSuperAdmin" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+            <input asp-for="ApplicationUser.IsSuperAdmin" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600" />
           </div>
         </div>
       </div>
     </div>
-  </div>
 
   <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
     <div class="mt-2 sm:col-start-2 sm:col-span-2 sm:mt-0">
@@ -40,4 +38,3 @@
         <button type="button" class="text-sm font-semibold leading-6 text-gray-900 ml-4">Cancel</button>
     </div>
   </div>
-</div>

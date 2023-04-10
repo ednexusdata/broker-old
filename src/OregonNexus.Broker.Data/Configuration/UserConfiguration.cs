@@ -17,6 +17,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         // Rename ID to UserId
         builder.Property(i => i.Id).HasColumnName("UserId");
 
+        builder.Property(i => i.CreatedAt).ValueGeneratedOnUpdate().Metadata.SetIsStored(true);
+        builder.Property(i => i.CreatedBy).ValueGeneratedOnUpdate().Metadata.SetIsStored(true);
+
         // Set foreign key on primary key since the join is one-to-one to AspNetUsers
         builder.HasOne<IdentityUser<Guid>>().WithOne()
             .HasPrincipalKey<IdentityUser<Guid>>(x => x.Id)

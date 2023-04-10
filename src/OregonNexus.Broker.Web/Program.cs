@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using InertiaAdapter.Extensions;
 using OregonNexus.Broker.Web;
+using OregonNexus.Broker.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +50,8 @@ builder.Services.AddIdentity<IdentityUser<Guid>, IdentityRole<Guid>>(options =>
 {
     options.User.RequireUniqueEmail = false;
 })
-.AddEntityFrameworkStores<BrokerDbContext>();
+.AddEntityFrameworkStores<BrokerDbContext>()
+.AddTokenProvider<DataProtectorTokenProvider<IdentityUser<Guid>>>(TokenOptions.DefaultProvider);
 
 builder.Services.ConfigureApplicationCookie(options => 
 {
@@ -89,6 +91,8 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddInertia();
 
+builder.Services.AddSingleton(typeof(ICurrentUser), typeof(CurrentUserService));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -102,6 +106,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseInertia();
+
+app.UseHttpMethodOverride(new HttpMethodOverrideOptions()
+{
+    FormFieldName = "_METHOD"
+});
 
 app.UseRouting();
 

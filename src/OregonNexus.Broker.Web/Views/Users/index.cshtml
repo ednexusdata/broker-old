@@ -1,4 +1,4 @@
-@model List<OregonNexus.Broker.Web.Controllers.UsersController.CombinedUser>
+@model List<OregonNexus.Broker.Web.Models.UserViewModel>
 @using System.Text.Json
 @{
     // Copyright: 2023 Education Nexus Oregon
@@ -34,15 +34,15 @@
           </thead>
           <tbody class="bg-white">
             @{ var even = true; }
-            @foreach(var combinedUser in Model)
+            @foreach(var user in Model)
             {
             <tr class="@(even ? "bg-gray-50": "")">
-              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@combinedUser?.ApplicationUser?.LastName</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@combinedUser?.ApplicationUser?.FirstName</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@combinedUser?.IdentityUser?.Email</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@combinedUser?.ApplicationUser?.IsSuperAdmin</td>
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@user?.LastName</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@user?.FirstName</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@user?.Email</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@user?.IsSuperAdmin</td>
               <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
-                <a asp-action="Edit" asp-controller="Users" asp-route-id="@combinedUser?.IdentityUser?.Id" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                <a asp-action="Edit" asp-controller="Users" asp-route-id="@user?.UserId" class="text-indigo-600 hover:text-indigo-900">Edit</a>
               </td>
             </tr>
             even = !even;

@@ -1,4 +1,4 @@
-@model OregonNexus.Broker.Web.Controllers.UsersController.CombinedUser
+@model OregonNexus.Broker.Web.Models.UserViewModel
 @{
     // Copyright: 2023 Education Nexus Oregon
     // Author: Makoa Jacobsen, makoa@makoajacobsen.com
@@ -10,7 +10,7 @@
     <partial name="_form" for="@Model" />
 </form>
 
-<form method="post" asp-action="Delete" asp-route-id="@Model.IdentityUser.Id">
+<form method="post" asp-action="Delete" asp-route-id="@Model.UserId">
 <div class="space-y-12 sm:space-y-16">
 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
     <div class="mt-2 sm:col-start-2 sm:col-span-2 sm:mt-0">

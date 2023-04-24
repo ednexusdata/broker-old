@@ -7,7 +7,7 @@ public class UserViewModel
 {
     public IdentityUser<Guid>? IdentityUser { get; set; }
 
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     [Required]
     [Display(Name = "Last Name")]

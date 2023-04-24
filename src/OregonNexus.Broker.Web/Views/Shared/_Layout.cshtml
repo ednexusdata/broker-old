@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script defer src="~/lib/jquery/dist/jquery.js"></script>
-    <script defer src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-    <script defer src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <partial name="_ValidationScriptsPartial"></partial>
 </head>
 <body class="h-full">
     @RenderBody()

@@ -62,7 +62,7 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(UserViewModel data)
     {
-        if (!ModelState.IsValid) { return View("Add"); }
+        if (!ModelState.IsValid) { TempData["Error"] = "User not created."; return View("Add"); }
         
         var identityUser = new IdentityUser<Guid> { UserName = data.Email, Email = data.Email }; 
         var result = await _userManager.CreateAsync(identityUser);
@@ -76,6 +76,8 @@ public class UsersController : Controller
         };
 
         await _repo.AddAsync(user);
+
+        TempData["Success"] = $"Created user {data.Email} ({user.Id}).";
 
         return RedirectToAction("Index");
     }
@@ -112,7 +114,7 @@ public class UsersController : Controller
 
         if (user is null) { throw new ArgumentException("Not a valid user."); }
 
-        if (!ModelState.IsValid) { return View("Edit"); }
+        if (!ModelState.IsValid) { TempData["Error"] = "User not updated."; return View("Edit"); }
 
         if (data.Email != user.Email)
         {
@@ -135,6 +137,8 @@ public class UsersController : Controller
 
         await _repo.UpdateAsync(appUser);
 
+        TempData["Success"] = $"Updated user {data.Email} ({user.Id}).";
+
         return RedirectToAction("Edit", new { Id = data.UserId });
     }
 
@@ -147,6 +151,8 @@ public class UsersController : Controller
 
         await _repo.DeleteAsync(applicationUser);
         await _userManager.DeleteAsync(identityUser);
+
+        TempData["Success"] = $"Deleted user {identityUser.Email} ({id}).";
 
         return RedirectToAction("Index");
     }

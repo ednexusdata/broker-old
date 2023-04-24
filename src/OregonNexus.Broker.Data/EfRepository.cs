@@ -33,7 +33,7 @@ public class EfRepository<T> : RepositoryBase<T>, IRepository<T> where T : BaseE
     {
         entity.UpdatedAt = DateTimeOffset.Now;
         entity.UpdatedBy = _currentUser.AuthenticatedUserId();
-
+        
         return base.UpdateAsync(entity, cancellationToken);
     }
 }

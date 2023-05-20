@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using OregonNexus.Broker.SharedKernel;
 using OregonNexus.Broker.Domain;
 using OregonNexus.Broker.Web.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace OregonNexus.Broker.Web.Controllers;
 
+[Authorize]
 public class EducationOrganizationsController : Controller
 {
     private IRepository<EducationOrganization> _repo { get; set; }
@@ -24,9 +26,14 @@ public class EducationOrganizationsController : Controller
         return View(data);
     }
 
-    public IActionResult Add()
+    public async Task<IActionResult> Add()
     {
-        return View();
+        var organizationViewModel = new EducationOrganizationViewModel();
+
+        // Get Organizations
+        organizationViewModel.Organizations = await GetOrganizationsSelectList();
+        
+        return View(organizationViewModel);
     }
 
     [ValidateAntiForgeryToken]
@@ -38,6 +45,7 @@ public class EducationOrganizationsController : Controller
         var organization = new EducationOrganization()
         {
             Id = Guid.NewGuid(),
+            ParentOrganizationId = data.ParentOrganizationId,
             Name = data.Name,
             Number = data.Number,
             EducationOrganizationType = data.EducationOrganizationType
@@ -61,11 +69,15 @@ public class EducationOrganizationsController : Controller
             organizationViewModel = new EducationOrganizationViewModel()
             {
                 EducationOrganizationId = organization.Id,
+                ParentOrganizationId = organization.ParentOrganizationId,
                 Name = organization.Name!,
                 EducationOrganizationType = organization.EducationOrganizationType,
                 Number = organization.Number!
             };
         }
+
+        // Get Organizations
+        organizationViewModel.Organizations = await GetOrganizationsSelectList(Id);
 
         return View(organizationViewModel);
     }
@@ -85,6 +97,7 @@ public class EducationOrganizationsController : Controller
 
         // Prepare organization object
         organization.Name = data.Name;
+        organization.ParentOrganizationId = data.ParentOrganizationId;
         organization.Number = data.Number;
         organization.EducationOrganizationType = data.EducationOrganizationType;
 
@@ -108,6 +121,28 @@ public class EducationOrganizationsController : Controller
         TempData["Success"] = $"Deleted organization {organization.Name} ({organization.Id}).";
 
         return RedirectToAction("Index");
+    }
+
+    private async Task<IEnumerable<SelectListItem>> GetOrganizationsSelectList(Guid? focusedOrganizationId = null)
+    {
+        var selectListItems = new List<SelectListItem>();
+        selectListItems.Add(new SelectListItem());
+
+        var organizations = await _repo.ListAsync();
+        organizations = organizations.OrderBy(x => x.Name).ToList();
+
+        foreach(var organization in organizations)
+        {
+            if (focusedOrganizationId is null || (focusedOrganizationId is not null && organization.Id != focusedOrganizationId))
+            {
+                selectListItems.Add(new SelectListItem() {
+                    Text = organization.Name,
+                    Value = organization.Id.ToString()
+                });
+            }
+        }
+
+        return selectListItems;
     }
 
 }

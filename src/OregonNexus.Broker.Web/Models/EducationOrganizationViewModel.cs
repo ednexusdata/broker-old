@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using OregonNexus.Broker.Domain;
 
 namespace OregonNexus.Broker.Web.Models;
@@ -18,4 +19,9 @@ public class EducationOrganizationViewModel
     [Required]
     [Display(Name = "Type")]
     public EducationOrganizationType EducationOrganizationType { get; set; } = default!;
+
+    [Display(Name = "Parent Organization")]
+    public Guid? ParentOrganizationId { get; set; }
+
+    public IEnumerable<SelectListItem>? Organizations { get; set; }
 }

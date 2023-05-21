@@ -20,7 +20,7 @@ public class EducationOrganizationViewModel
     [Display(Name = "Type")]
     public EducationOrganizationType EducationOrganizationType { get; set; } = default!;
 
-    [Display(Name = "Parent Organization")]
+    [Display(Name = "District")]
     public Guid? ParentOrganizationId { get; set; }
 
     public IEnumerable<SelectListItem>? Organizations { get; set; }

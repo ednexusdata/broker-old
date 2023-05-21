@@ -5,6 +5,7 @@ using OregonNexus.Broker.SharedKernel;
 using OregonNexus.Broker.Domain;
 using OregonNexus.Broker.Web.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using OregonNexus.Broker.Domain.Specifications;
 
 namespace OregonNexus.Broker.Web.Controllers;
 
@@ -21,7 +22,7 @@ public class EducationOrganizationsController : Controller
     public async Task<IActionResult> Index()
     {
         var data = await _repo.ListAsync();
-        data = data.OrderBy(x => x.Name).ToList();
+        data = data.OrderBy(x => x.ParentOrganization?.Name).ThenBy(x => x.Name).ToList();
 
         return View(data);
     }
@@ -45,7 +46,7 @@ public class EducationOrganizationsController : Controller
         var organization = new EducationOrganization()
         {
             Id = Guid.NewGuid(),
-            ParentOrganizationId = data.ParentOrganizationId,
+            ParentOrganizationId = (data.EducationOrganizationType == EducationOrganizationType.School) ? data.ParentOrganizationId : null,
             Name = data.Name,
             Number = data.Number,
             EducationOrganizationType = data.EducationOrganizationType
@@ -97,7 +98,14 @@ public class EducationOrganizationsController : Controller
 
         // Prepare organization object
         organization.Name = data.Name;
-        organization.ParentOrganizationId = data.ParentOrganizationId;
+        if (data.EducationOrganizationType == EducationOrganizationType.School)
+        {
+            organization.ParentOrganizationId = data.ParentOrganizationId;
+        }
+        else
+        {
+            organization.ParentOrganizationId = null;
+        }
         organization.Number = data.Number;
         organization.EducationOrganizationType = data.EducationOrganizationType;
 
@@ -126,9 +134,8 @@ public class EducationOrganizationsController : Controller
     private async Task<IEnumerable<SelectListItem>> GetOrganizationsSelectList(Guid? focusedOrganizationId = null)
     {
         var selectListItems = new List<SelectListItem>();
-        selectListItems.Add(new SelectListItem());
 
-        var organizations = await _repo.ListAsync();
+        var organizations = await _repo.ListAsync(new OrganizationByTypeSpec(EducationOrganizationType.District));
         organizations = organizations.OrderBy(x => x.Name).ToList();
 
         foreach(var organization in organizations)

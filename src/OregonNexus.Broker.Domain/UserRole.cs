@@ -3,7 +3,7 @@
 
 namespace OregonNexus.Broker.Domain;
 
-public class UserRole : BaseEntity
+public class UserRole : BaseEntity, IAggregateRoot
 {
     public EducationOrganization? Education { get; set; }
     public Guid? EducationOrganizationId { get; set; }

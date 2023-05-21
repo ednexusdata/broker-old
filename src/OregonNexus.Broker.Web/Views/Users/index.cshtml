@@ -14,7 +14,7 @@
       <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name, title, email and role.</p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-      <a asp-action="Add" asp-controller="Users" type="button" class="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Add user</a>
+      <a asp-action="Add" asp-controller="Users" type="button" class="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Add User</a>
     </div>
   </div>
   <div class="mt-8 flow-root">
@@ -27,6 +27,9 @@
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">First Name</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Super Admin</th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
+                <span class="sr-only">Roles</span>
+              </th>
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
                 <span class="sr-only">Edit</span>
               </th>
@@ -41,6 +44,9 @@
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@user?.FirstName</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@user?.Email</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@user?.IsSuperAdmin</td>
+              <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
+                <a asp-action="Index" asp-controller="UserRoles" asp-route-id="@user?.UserId" class="text-indigo-600 hover:text-indigo-900">Roles</a>
+              </td>
               <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
                 <a asp-action="Edit" asp-controller="Users" asp-route-id="@user?.UserId" class="text-indigo-600 hover:text-indigo-900">Edit</a>
               </td>

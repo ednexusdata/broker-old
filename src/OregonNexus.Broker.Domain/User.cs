@@ -10,4 +10,10 @@ public class User : BaseEntity, IAggregateRoot
     public string LastName { get; set; } = default!;
     
     public List<UserRole>? UserRoles { get; set; }
+
+    public string Name { 
+        get {
+            return $"{FirstName} {LastName}";
+        }
+    }
 }

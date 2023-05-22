@@ -45,9 +45,26 @@ public class UserRolesController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(Guid UserId, UserRolesViewModel model)
+    public async Task<IActionResult> Create(UserRolesViewModel model)
     {
-        return NotFound();
+        if (!ModelState.IsValid)
+        {
+            TempData["Error"] = "Missing organization, role, or user."; return View("Index", model);
+        }
+        
+        var userRole = new UserRole()
+        {
+            Id = Guid.NewGuid(),
+            UserId = model.UserId,
+            EducationOrganizationId = model.EducationOrganizationId,
+            Role = model.Role.Value
+        };
+
+        await _userRoleRepo.AddAsync(userRole);
+
+        TempData["Success"] = $"Added user role. ({userRole.Id}).";
+
+        return RedirectToAction("Index", new { Id = model.UserId });
     }
 
     public IActionResult Delete(Guid? Id)

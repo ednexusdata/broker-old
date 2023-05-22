@@ -41,10 +41,10 @@
             @foreach(var userRole in Model.UserRoles)
             {
             <tr class="@(even ? "bg-gray-50": "")">
-              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@userRole?.EducationOrganization.Name</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">@userRole?.Role</td>
-              <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
-                <a asp-action="Delete" asp-controller="UserRoles" asp-route-id="@userRole?.Id" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+              <td class="grid grid-cols-3">
+                <div class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@userRole?.EducationOrganization.Name</div>
+                <div class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@(((System.ComponentModel.DataAnnotations.DisplayAttribute)typeof(Role).GetMember(userRole?.Role.ToString()).First().GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false).First()).Name)</div>
+                <div class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3"><button type="submit" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Delete</button></div>
               </td>
             </tr>
             even = !even;

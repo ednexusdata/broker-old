@@ -7,6 +7,7 @@ namespace OregonNexus.Broker.Web.Models;
 
 public class UserRolesViewModel
 {
+    [Required]
     public Guid? UserId { get; set; }
 
     public User? User { get; set; }
@@ -14,9 +15,10 @@ public class UserRolesViewModel
     public List<UserRole>? UserRoles { get; set; }
 
     public IEnumerable<SelectListItem>? EducationOrganizations { get; set; }
-
-    public UserRoleViewModel TemplateUserRoleViewModel => new UserRoleViewModel();
-
+    
+    [Required]
     public Guid? EducationOrganizationId { get; set; }
+    
+    [Required]
     public Role? Role { get; set; }
 }

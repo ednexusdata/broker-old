@@ -16,4 +16,7 @@ public class UserRolesViewModel
     public IEnumerable<SelectListItem>? EducationOrganizations { get; set; }
 
     public UserRoleViewModel TemplateUserRoleViewModel => new UserRoleViewModel();
+
+    public Guid? EducationOrganizationId { get; set; }
+    public Role? Role { get; set; }
 }

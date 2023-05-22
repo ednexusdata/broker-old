@@ -45,7 +45,7 @@ public class UserRolesController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(Guid UserId, UserViewModel model)
+    public IActionResult Create(Guid UserId, UserRolesViewModel model)
     {
         return NotFound();
     }

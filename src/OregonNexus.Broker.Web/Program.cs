@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using InertiaAdapter.Extensions;
 using OregonNexus.Broker.Web;
 using OregonNexus.Broker.Web.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,11 @@ builder.Services.AddDbContext<BrokerDbContext>(options => {
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped(typeof(IMediator), typeof(Mediator));
+
+foreach(var assembly in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "OregonNexus.Broker.Web.Helpers", StringComparison.Ordinal)).ToArray())
+{
+    builder.Services.AddScoped(assembly, assembly);
+}
 
 builder.Services.AddIdentity<IdentityUser<Guid>, IdentityRole<Guid>>(options =>
 {

@@ -13,7 +13,7 @@ public class EducationOrganizationHelper
         _repo = repo;
     }
     
-    public async Task<IEnumerable<SelectListItem>> GetOrganizationsSelectList(Guid? focusedOrganizationId = null)
+    public async Task<IEnumerable<SelectListItem>> GetDistrictsOrganizationsSelectList(Guid? focusedOrganizationId = null)
     {
         var selectListItems = new List<SelectListItem>();
 
@@ -29,6 +29,24 @@ public class EducationOrganizationHelper
                     Value = organization.Id.ToString()
                 });
             }
+        }
+
+        return selectListItems;
+    }
+
+    public async Task<IEnumerable<SelectListItem>> GetOrganizationsSelectList(Guid? focusedOrganizationId = null)
+    {
+        var selectListItems = new List<SelectListItem>();
+
+        var organizations = await _repo.ListAsync();
+        organizations = organizations.OrderBy(x => x.ParentOrganization?.Name).ThenBy(x => x.Name).ToList();
+
+        foreach(var organization in organizations)
+        {
+            selectListItems.Add(new SelectListItem() {
+                Text = organization.Name,
+                Value = organization.Id.ToString()
+            });
         }
 
         return selectListItems;

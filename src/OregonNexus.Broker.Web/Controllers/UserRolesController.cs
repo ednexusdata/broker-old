@@ -67,8 +67,18 @@ public class UserRolesController : Controller
         return RedirectToAction("Index", new { Id = model.UserId });
     }
 
-    public IActionResult Delete(Guid? Id)
+    [ValidateAntiForgeryToken]
+    [HttpDelete]
+    public async Task<IActionResult> Delete(Guid? Id)
     {
-        return NotFound();
+        var organizationRole = await _userRoleRepo.GetByIdAsync(Id.Value);
+
+        if (organizationRole is null) { throw new ArgumentException("Not a valid organization role."); }
+
+        await _userRoleRepo.DeleteAsync(organizationRole);
+
+        TempData["Success"] = $"Deleted organization role ({organizationRole.Id}).";
+
+        return RedirectToAction("Index", new { Id = organizationRole.UserId });
     }
 }

@@ -12,7 +12,7 @@ public class UserRolesViewModel
 
     public User? User { get; set; }
 
-    public List<UserRole>? UserRoles { get; set; }
+    public List<UserRoleViewModel>? UserRoles { get; set; }
 
     public IEnumerable<SelectListItem>? EducationOrganizations { get; set; }
     
@@ -21,4 +21,10 @@ public class UserRolesViewModel
     
     [Required]
     public Role? Role { get; set; }
+}
+
+public class UserRoleViewModel
+{
+    public UserRole? UserRole { get; set; }
+    public string? DisplayText { get; set; }
 }

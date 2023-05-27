@@ -34,11 +34,30 @@ public class UserRolesController : Controller
         var userRoleSpec = new UserRolesByUserSpec(user.Id);
         var userRoles = await _userRoleRepo.ListAsync(userRoleSpec);
 
+        var userRoleViewModels = new List<UserRoleViewModel>();
+
+        var existingOrganizations = new List<EducationOrganization>();
+
+        foreach(var userRole in userRoles)
+        {
+            userRoleViewModels.Add(new UserRoleViewModel() {
+                UserRole = userRole,
+                DisplayText = (userRole.EducationOrganization?.EducationOrganizationType == EducationOrganizationType.District) 
+                    ? userRole.EducationOrganization?.Name 
+                    : $"{userRole.EducationOrganization?.ParentOrganization?.Name} / {userRole.EducationOrganization?.Name}"
+            }
+            );
+
+            existingOrganizations.Add(userRole.EducationOrganization);
+        }
+
+        userRoleViewModels = userRoleViewModels.OrderBy(x => x.DisplayText).ToList();
+
         var userRolesViewModel = new UserRolesViewModel() {
             UserId = user.Id,
             User = user,
-            UserRoles = userRoles,
-            EducationOrganizations = await _edOrgHelper.GetOrganizationsSelectList()
+            UserRoles = userRoleViewModels,
+            EducationOrganizations = await _edOrgHelper.GetOrganizationsSelectList(existingOrganizations)
         };
 
         return View(userRolesViewModel);

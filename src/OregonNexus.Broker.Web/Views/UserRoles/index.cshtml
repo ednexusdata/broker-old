@@ -28,6 +28,8 @@
             </tr>
           </thead>
           <tbody class="bg-white">
+            @if (Model.EducationOrganizations?.Count() > 0)
+            {
             <tr>
               <td>
                 <form asp-action="Create" asp-route-UserId="@Model.UserId" class="grid grid-cols-3">
@@ -37,15 +39,16 @@
                 </form>
               </td>
             </tr>
+            }
             @{ var even = true; }
-            @foreach(var userRole in Model.UserRoles)
+            @foreach(var userRole in Model.UserRoles!)
             {
             <tr class="@(even ? "bg-gray-50": "")">
               <td class="grid grid-cols-3">
-                <div class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@userRole?.EducationOrganization.Name</div>
-                <div class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@(((System.ComponentModel.DataAnnotations.DisplayAttribute)typeof(Role).GetMember(userRole?.Role.ToString()).First().GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false).First()).Name)</div>
+                <div class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@userRole.DisplayText</div>
+                <div class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@(((System.ComponentModel.DataAnnotations.DisplayAttribute)typeof(Role).GetMember(userRole?.UserRole.Role.ToString()).First().GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false).First()).Name)</div>
                 <div class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
-                  <form method="post" asp-action="Delete" asp-route-id="@userRole.Id">
+                  <form method="post" asp-action="Delete" asp-route-id="@userRole.UserRole?.Id">
                     <input type="hidden" name="_METHOD" value="DELETE" />
                     <button type="submit" class="inline-flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Delete</button>
                   </form>    

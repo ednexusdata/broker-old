@@ -34,7 +34,7 @@ public class EducationOrganizationHelper
         return selectListItems;
     }
 
-    public async Task<IEnumerable<SelectListItem>> GetOrganizationsSelectList(Guid? focusedOrganizationId = null)
+    public async Task<IEnumerable<SelectListItem>> GetOrganizationsSelectList(List<EducationOrganization>? edOrgsToRemove)
     {
         var selectListItems = new List<SelectListItem>();
 
@@ -43,11 +43,18 @@ public class EducationOrganizationHelper
 
         foreach(var organization in organizations)
         {
-            selectListItems.Add(new SelectListItem() {
-                Text = organization.Name,
-                Value = organization.Id.ToString()
-            });
+            if (edOrgsToRemove is not null && !edOrgsToRemove.Contains(organization))
+            {
+                selectListItems.Add(new SelectListItem() {
+                    Text = (organization.EducationOrganizationType == EducationOrganizationType.District) 
+                        ? organization.Name 
+                        : $"{organization.ParentOrganization?.Name} / {organization.Name}",
+                    Value = organization.Id.ToString()
+                });
+            }
         }
+        
+        selectListItems = selectListItems.OrderBy(x => x.Text).ToList();
 
         return selectListItems;
     }

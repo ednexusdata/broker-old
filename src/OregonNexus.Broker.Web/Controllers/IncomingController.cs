@@ -11,7 +11,7 @@ using InertiaAdapter;
 
 namespace OregonNexus.Broker.Web.Controllers;
 
-[Authorize]
+[Authorize(Policy = "TransferRecords")]
 public class IncomingController : Controller
 {
     public IActionResult Index()

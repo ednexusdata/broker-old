@@ -104,6 +104,10 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy("AllEducationOrganizations",
       policy => policy.RequireClaim("AllEducationOrganizations", PermissionType.Read.ToString(), PermissionType.Write.ToString())
     );
+
+    options.AddPolicy("TransferRecords",
+      policy => policy.RequireClaim("TransferRecords", "true")
+    );
 });
 builder.Services.AddTransient<IClaimsTransformation, BrokerClaimsTransformation>();
 

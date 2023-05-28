@@ -29,7 +29,10 @@
       </div>
     </div>
   </nav>
-
+  @if (ViewData["FocusBar"] is not null && bool.Parse(ViewData["FocusBar"].ToString()) == true)
+  {
+    <partial name="_FocusPartial"></partial>
+  }
   <div class="py-6">
     <header>
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

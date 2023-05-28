@@ -1,0 +1,15 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+@using OregonNexus.Broker.Domain
+@inject IHttpContextAccessor httpContextAccessor 
+
+@{
+    var _session = httpContextAccessor?.HttpContext?.Session;
+    var _currentUser = _session?.GetObjectFromJson<User>("User.Current");
+}
+
+<div class="flex items-center gap-x-6 bg-white px-6 py-2.5 px-3.5">
+  <p class="text-sm leading-6">
+    Focus: <select><option>Test District</option></select>
+  </p>
+</div>

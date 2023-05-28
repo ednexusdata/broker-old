@@ -6,5 +6,5 @@ namespace OregonNexus.Broker.Web.Controllers;
 
 public class AuthenticatedController : Controller
 {
-    
+
 }

@@ -51,7 +51,7 @@ public class BrokerClaimsTransformation : IClaimsTransformation
         claimType = "TransferRecords";
         if (!principal.HasClaim(claim => claim.Type == claimType))
         {
-            if ((await GetCurrentUser(principal)).UserRoles.Count > 0)
+            if ((await GetCurrentUser(principal)).UserRoles.Count > 0 || (await GetCurrentUser(principal)).AllEducationOrganizations != PermissionType.None)
             {
                 claims.Add(new Claim(claimType, "true"));
             }

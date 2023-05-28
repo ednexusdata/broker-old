@@ -13,6 +13,8 @@ using InertiaAdapter.Extensions;
 using OregonNexus.Broker.Web;
 using OregonNexus.Broker.Web.Services;
 using System.Reflection;
+using OregonNexus.Broker.Domain;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -94,10 +96,21 @@ builder.Services.AddAuthentication()
     }
 );
 
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("SuperAdmin",
+      policy => policy.RequireClaim("SuperAdmin", "true")
+    );
+
+    options.AddPolicy("AllEducationOrganizations",
+      policy => policy.RequireClaim("AllEducationOrganizations", PermissionType.Read.ToString(), PermissionType.Write.ToString())
+    );
+});
+builder.Services.AddTransient<IClaimsTransformation, BrokerClaimsTransformation>();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddInertia();
 
-builder.Services.AddSingleton(typeof(ICurrentUser), typeof(CurrentUserService));
+builder.Services.AddSingleton<ICurrentUser, CurrentUserService>();
 
 var app = builder.Build();
 

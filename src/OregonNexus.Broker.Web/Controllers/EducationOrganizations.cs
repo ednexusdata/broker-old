@@ -10,7 +10,7 @@ using OregonNexus.Broker.Web.Helpers;
 
 namespace OregonNexus.Broker.Web.Controllers;
 
-[Authorize]
+[Authorize(Policy = "SuperAdmin")]
 public class EducationOrganizationsController : Controller
 {
     private readonly IRepository<EducationOrganization> _repo;

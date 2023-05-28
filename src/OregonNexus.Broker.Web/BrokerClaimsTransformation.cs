@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using OregonNexus.Broker.Data;
 using OregonNexus.Broker.Domain;
+using OregonNexus.Broker.Domain.Specifications;
 using OregonNexus.Broker.SharedKernel;
 using System.Security.Claims;
 
@@ -65,7 +66,7 @@ public class BrokerClaimsTransformation : IClaimsTransformation
             var email = principal.Claims.Where(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").FirstOrDefault()!.Value!;
             var userIdentity = await _userManager.FindByEmailAsync(email);
 
-            _user = await _userRepo.GetByIdAsync(userIdentity.Id);
+            _user = await _userRepo.GetBySpecAsync(new ReadOnlyUserSpec(userIdentity.Id));
         }
         return _user;
     }

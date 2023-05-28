@@ -27,7 +27,23 @@ public class EducationOrganizationsController : Controller
         var data = await _repo.ListAsync();
         data = data.OrderBy(x => x.ParentOrganization?.Name).ThenBy(x => x.Name).ToList();
 
-        return View(data);
+        var viewData = new List<EducationOrganization>();
+        while(data.Count > 0)
+        {
+            var eo = data.FirstOrDefault();
+            // Add district
+            viewData.Add(eo);
+            data.Remove(eo);
+            // add the schools
+            var schools = data.Where(x => x.ParentOrganization == eo).OrderBy(x => x.Name).ToList();
+            foreach(var seo in schools)
+            {
+                viewData.Add(seo);
+                data.Remove(seo);
+            }
+        }
+
+        return View(viewData);
     }
 
     public async Task<IActionResult> Add()

@@ -36,13 +36,15 @@ public class UsersController : Controller
         {
             var appUser = users.Where(x => x.Id == identityUser.Id).FirstOrDefault();
 
+            if (appUser is null) { throw new NullReferenceException("Missing matching user in users table."); }
+
             var combinedUser = new UserViewModel()
             {
                 UserId = identityUser.Id,
                 FirstName = appUser.FirstName,
                 LastName = appUser.LastName,
                 IsSuperAdmin = appUser.IsSuperAdmin,
-                Email = identityUser.Email
+                Email = identityUser.Email!
             };
 
             combinedUsers.Add(combinedUser);
@@ -98,7 +100,7 @@ public class UsersController : Controller
                 FirstName = applicationUser.FirstName,
                 LastName = applicationUser.LastName,
                 IsSuperAdmin = applicationUser.IsSuperAdmin,
-                Email = identityUser.Email
+                Email = identityUser.Email!
             };
         }
 
@@ -109,6 +111,8 @@ public class UsersController : Controller
     [HttpPatch]
     public async Task<IActionResult> Update(UserViewModel data)
     {
+        if (data.UserId is null) { throw new ArgumentException("Missing user id for processing."); }
+        
         // Get existing user
         var user = await _userManager.FindByIdAsync(data.UserId.ToString());
 
@@ -144,10 +148,15 @@ public class UsersController : Controller
 
     [ValidateAntiForgeryToken]
     [HttpDelete]
-    public async Task<IActionResult> Delete(Guid? id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         var identityUser = await _userManager.FindByIdAsync(id.ToString());
+
+        if (identityUser is null) { throw new ArgumentNullException("Could not find user for id." ); }
+
         var applicationUser = await _repo.GetByIdAsync(id);
+
+        if (applicationUser is null) { throw new ArgumentNullException("Could not find app user for id." ); }
 
         await _repo.DeleteAsync(applicationUser);
         await _userManager.DeleteAsync(identityUser);

@@ -31,15 +31,18 @@ public class EducationOrganizationsController : Controller
         while(data.Count > 0)
         {
             var eo = data.FirstOrDefault();
-            // Add district
-            viewData.Add(eo);
-            data.Remove(eo);
-            // add the schools
-            var schools = data.Where(x => x.ParentOrganization == eo).OrderBy(x => x.Name).ToList();
-            foreach(var seo in schools)
+            if (eo is not null)
             {
-                viewData.Add(seo);
-                data.Remove(seo);
+                // Add district
+                viewData.Add(eo);
+                data.Remove(eo);
+                // add the schools
+                var schools = data.Where(x => x.ParentOrganization == eo).OrderBy(x => x.Name).ToList();
+                foreach(var seo in schools)
+                {
+                    viewData.Add(seo);
+                    data.Remove(seo);
+                }
             }
         }
 
@@ -139,6 +142,8 @@ public class EducationOrganizationsController : Controller
     [HttpDelete]
     public async Task<IActionResult> Delete(Guid? id)
     {
+        if (id is null) { throw new ArgumentNullException("Missing id for organization to delete."); }
+        
         var organization = await _repo.GetByIdAsync(id.Value);
 
         if (organization is null) { throw new ArgumentException("Not a valid organization."); }

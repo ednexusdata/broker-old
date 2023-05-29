@@ -44,6 +44,7 @@ public class UsersController : Controller
                 FirstName = appUser.FirstName,
                 LastName = appUser.LastName,
                 IsSuperAdmin = appUser.IsSuperAdmin,
+                AllEducationOrganizations = appUser.AllEducationOrganizations,
                 Email = identityUser.Email!
             };
 
@@ -74,7 +75,8 @@ public class UsersController : Controller
             Id = identityUser.Id,
             FirstName = data.FirstName,
             LastName = data.LastName,
-            IsSuperAdmin = data.IsSuperAdmin
+            IsSuperAdmin = data.IsSuperAdmin,
+            AllEducationOrganizations = data.AllEducationOrganizations
         };
 
         await _repo.AddAsync(user);
@@ -100,6 +102,7 @@ public class UsersController : Controller
                 FirstName = applicationUser.FirstName,
                 LastName = applicationUser.LastName,
                 IsSuperAdmin = applicationUser.IsSuperAdmin,
+                AllEducationOrganizations = applicationUser.AllEducationOrganizations,
                 Email = identityUser.Email!
             };
         }
@@ -136,7 +139,8 @@ public class UsersController : Controller
             Id = user.Id,
             FirstName = data.FirstName,
             LastName = data.LastName,
-            IsSuperAdmin = data.IsSuperAdmin
+            IsSuperAdmin = data.IsSuperAdmin,
+            AllEducationOrganizations = data.AllEducationOrganizations
         };
 
         await _repo.UpdateAsync(appUser);

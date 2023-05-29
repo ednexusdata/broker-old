@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using OregonNexus.Broker.Domain;
 
 namespace OregonNexus.Broker.Web.Models;
 
@@ -25,4 +26,8 @@ public class UserViewModel
     [Required]
     [Display(Name = "Super Admin")]
     public bool IsSuperAdmin { get; set; } = false;
+
+    [Required]
+    [Display(Name = "All Organizations")]
+    public PermissionType AllEducationOrganizations { get; set; } = PermissionType.None;
 }

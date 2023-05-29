@@ -600,6 +600,10 @@ video {
   margin-left: auto;
 }
 
+.mr-3 {
+  margin-right: 0.75rem;
+}
+
 .mt-10 {
   margin-top: 2.5rem;
 }
@@ -929,19 +933,9 @@ video {
   padding-right: 0.75rem;
 }
 
-.px-3\.5 {
-  padding-left: 0.875rem;
-  padding-right: 0.875rem;
-}
-
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
-}
-
-.px-6 {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
 }
 
 .px-8 {
@@ -1009,6 +1003,10 @@ video {
 
 .pl-4 {
   padding-left: 1rem;
+}
+
+.pr-10 {
+  padding-right: 2.5rem;
 }
 
 .pr-3 {

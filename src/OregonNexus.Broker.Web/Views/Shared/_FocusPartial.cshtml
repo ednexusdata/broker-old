@@ -5,11 +5,19 @@
 
 @{
     var _session = httpContextAccessor?.HttpContext?.Session;
-    var _currentUser = _session?.GetObjectFromJson<User>("User.Current");
+    var returnUrl = httpContextAccessor?.HttpContext?.Request.Path.ToString();
 }
-
-<div class="flex items-center gap-x-6 bg-white px-6 py-2.5 px-3.5">
-  <p class="text-sm leading-6">
-    Focus: <select><option>Test District</option></select>
-  </p>
+<div class="bg-white">
+  <div class="flex items-center gap-x-6 mx-auto max-w-7xl px-8 py-2.5">
+    <form asp-action="SetFocus" asp-controller="Focus" x-data="">
+      <label for="location" class="text-sm font-medium leading-6 text-gray-900 mr-3">Focus</label>
+      <select id="location" name="location" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 text-sm ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600" x-on:change="$el.form.submit();">
+        <option>United States</option>
+        <option selected>Canada</option>
+        <option>Mexico</option>
+      </select>
+      <input type="hidden" name="ReturnUrl" value="@returnUrl" />
+    </form>
+  </div>
 </div>
+

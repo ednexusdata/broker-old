@@ -13,8 +13,8 @@
 <div class="bg-white">
   <div class="flex items-center gap-x-6 mx-auto max-w-7xl px-8 py-2.5">
     <form asp-action="SetFocus" asp-controller="Focus" x-data="">
-      <label asp-for="FocusEducationOrganization" class="text-sm font-medium leading-6 text-gray-900 mr-3">Focus</label>
-      <select asp-for="FocusEducationOrganization" asp-items="focusableEducationOrganizations" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 text-sm ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600" x-on:change="$el.form.submit();">
+      <label asp-for="FocusEducationOrganizationId" class="text-sm font-medium leading-6 text-gray-900 mr-3">Focus</label>
+      <select asp-for="FocusEducationOrganizationId" asp-items="focusableEducationOrganizations" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 text-sm ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600" x-on:change="$el.form.submit();">
       </select>
       <input type="hidden" name="ReturnUrl" value="@returnUrl" />
     </form>

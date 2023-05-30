@@ -8,4 +8,5 @@ namespace OregonNexus.Broker.Web.Models;
 public class FocusViewModel
 {
     public string ReturnUrl { get; set; } = default!;
+    public EducationOrganization? FocusEducationOrganization { get; set; }
 }

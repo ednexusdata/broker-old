@@ -8,13 +8,15 @@ namespace OregonNexus.Broker.Web.Helpers;
 public class FocusHelper
 {
     private readonly IRepository<EducationOrganization> _edOrgRepo;
+    private readonly IRepository<UserRole> _userRoleRepo;
     private readonly IRepository<User> _userRepo;
     private readonly ISession _session;
 
-    public FocusHelper(IRepository<EducationOrganization> edOrgRepo, IRepository<User> userRepo, IHttpContextAccessor httpContextAccessor)
+    public FocusHelper(IRepository<EducationOrganization> edOrgRepo, IRepository<UserRole> userRoleRepo, IRepository<User> userRepo, IHttpContextAccessor httpContextAccessor)
     {
         _edOrgRepo = edOrgRepo;
         _userRepo = userRepo;
+        _userRoleRepo = userRoleRepo;
         _session = httpContextAccessor.HttpContext?.Session;
     }
 
@@ -25,6 +27,8 @@ public class FocusHelper
         // Get currently logged in user
         var currentUser = _session.GetObjectFromJson<User>("User.Current");
         var allEdOrgs = currentUser?.AllEducationOrganizations;
+
+        if (currentUser?.Id == null) return selectListItems;
 
         if (allEdOrgs == PermissionType.Read || allEdOrgs == PermissionType.Write)
         { 
@@ -47,9 +51,23 @@ public class FocusHelper
                     Selected = (_session.GetString("Focus.EducationOrganization.Current") == organization.Id.ToString())
                 });
             }
-            
-            selectListItems = selectListItems.OrderBy(x => x.Text).ToList();
         }
+        else
+        {
+            var userRoleSpec = new UserRolesByUserSpec(currentUser.Id);
+            var userRoles = await _userRoleRepo.ListAsync(userRoleSpec);
+
+            foreach(var userRole in userRoles)
+            {
+                selectListItems.Add(new SelectListItem() {
+                    Text = $"{userRole.EducationOrganization.ParentOrganization?.Name} / {userRole.EducationOrganization.Name}",
+                    Value = userRole.Id.ToString(),
+                    Selected = (_session.GetString("Focus.EducationOrganization.Current") == userRole.EducationOrganizationId.ToString())
+                });
+            }
+        }
+
+        selectListItems = selectListItems.OrderBy(x => x.Text).ToList();
 
         if (_session.GetString("Focus.EducationOrganization.Current") == null)
         {

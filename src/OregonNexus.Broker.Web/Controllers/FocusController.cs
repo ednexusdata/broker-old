@@ -25,8 +25,6 @@ public class FocusController : Controller
         _session = httpContextAccessor.HttpContext?.Session;
     }
 
-    
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult SetFocus(FocusViewModel model)

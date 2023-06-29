@@ -13,7 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OregonNexus.Broker.Web", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OregonNexus.Broker.SharedKernel", "src\OregonNexus.Broker.SharedKernel\OregonNexus.Broker.SharedKernel.csproj", "{213E6441-2780-4D5F-8C5B-22C73AC266C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OregonNexus.Broker.Core", "src\OregonNexus.Broker.Core\OregonNexus.Broker.Core.csproj", "{FAAE69C4-B90E-4530-AD3D-3C590EE0BD1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OregonNexus.Broker.Connector", "src\OregonNexus.Broker.Connector\OregonNexus.Broker.Connector.csproj", "{FAAE69C4-B90E-4530-AD3D-3C590EE0BD1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OregonNexus.Broker.Connector.Edupoint.Synergy", "src\OregonNexus.Broker.Connector.Edupoint.Synergy\OregonNexus.Broker.Connector.Edupoint.Synergy.csproj", "{057B8C62-68B3-4F23-BBDC-E50FA9ECD4F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OregonNexus.Broker.Core", "src\OregonNexus.Broker.Core\OregonNexus.Broker.Core.csproj", "{2FD9A74E-72AB-4353-BC27-D5BB521902A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +48,14 @@ Global
 		{FAAE69C4-B90E-4530-AD3D-3C590EE0BD1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAAE69C4-B90E-4530-AD3D-3C590EE0BD1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAAE69C4-B90E-4530-AD3D-3C590EE0BD1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{057B8C62-68B3-4F23-BBDC-E50FA9ECD4F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{057B8C62-68B3-4F23-BBDC-E50FA9ECD4F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{057B8C62-68B3-4F23-BBDC-E50FA9ECD4F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{057B8C62-68B3-4F23-BBDC-E50FA9ECD4F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FD9A74E-72AB-4353-BC27-D5BB521902A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FD9A74E-72AB-4353-BC27-D5BB521902A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FD9A74E-72AB-4353-BC27-D5BB521902A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FD9A74E-72AB-4353-BC27-D5BB521902A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E658AFD6-4BCE-4AEB-BA86-00469EE6CD4D} = {841FA013-3B73-4EA0-B371-8675686A8ECD}
@@ -51,5 +63,7 @@ Global
 		{02420D15-1E4D-4609-A082-7EF4CD8AE4E3} = {841FA013-3B73-4EA0-B371-8675686A8ECD}
 		{213E6441-2780-4D5F-8C5B-22C73AC266C0} = {841FA013-3B73-4EA0-B371-8675686A8ECD}
 		{FAAE69C4-B90E-4530-AD3D-3C590EE0BD1A} = {841FA013-3B73-4EA0-B371-8675686A8ECD}
+		{057B8C62-68B3-4F23-BBDC-E50FA9ECD4F9} = {841FA013-3B73-4EA0-B371-8675686A8ECD}
+		{2FD9A74E-72AB-4353-BC27-D5BB521902A9} = {841FA013-3B73-4EA0-B371-8675686A8ECD}
 	EndGlobalSection
 EndGlobal

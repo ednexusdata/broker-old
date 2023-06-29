@@ -15,6 +15,7 @@ using OregonNexus.Broker.Web.Services;
 using System.Reflection;
 using OregonNexus.Broker.Domain;
 using Microsoft.AspNetCore.Authentication;
+using OregonNexus.Broker.Connector;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,6 +116,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddInertia();
 
 builder.Services.AddSingleton<ICurrentUser, CurrentUserService>();
+
+builder.Services.AddConnectorLoader();
+builder.Services.AddConnectorDependencies();
 
 var app = builder.Build();
 

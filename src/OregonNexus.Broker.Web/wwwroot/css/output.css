@@ -604,6 +604,10 @@ video {
   margin-right: 0.75rem;
 }
 
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
 .mt-10 {
   margin-top: 2.5rem;
 }
@@ -614,6 +618,10 @@ video {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
 }
 
 .mt-8 {
@@ -672,6 +680,10 @@ video {
   height: 1.25rem;
 }
 
+.h-6 {
+  height: 1.5rem;
+}
+
 .h-full {
   height: 100%;
 }
@@ -692,6 +704,10 @@ video {
   width: 1.25rem;
 }
 
+.w-6 {
+  width: 1.5rem;
+}
+
 .w-auto {
   width: auto;
 }
@@ -702,6 +718,10 @@ video {
 
 .min-w-full {
   min-width: 100%;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
 }
 
 .max-w-3xl {
@@ -716,7 +736,15 @@ video {
   max-width: 20rem;
 }
 
+.flex-none {
+  flex: none;
+}
+
 .flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+.shrink-0 {
   flex-shrink: 0;
 }
 
@@ -776,9 +804,18 @@ video {
   gap: 0.75rem;
 }
 
+.gap-x-3 {
+  -moz-column-gap: 0.75rem;
+       column-gap: 0.75rem;
+}
+
 .gap-x-6 {
   -moz-column-gap: 1.5rem;
        column-gap: 1.5rem;
+}
+
+.gap-y-1 {
+  row-gap: 0.25rem;
 }
 
 .space-x-8 > :not([hidden]) ~ :not([hidden]) {
@@ -793,6 +830,12 @@ video {
   margin-bottom: calc(3rem * var(--tw-space-y-reverse));
 }
 
+.space-y-16 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(4rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(4rem * var(--tw-space-y-reverse));
+}
+
 .space-y-8 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
@@ -803,6 +846,11 @@ video {
   --tw-divide-y-reverse: 0;
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
   border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
+
+.divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-divide-opacity));
 }
 
 .divide-gray-300 > :not([hidden]) ~ :not([hidden]) {
@@ -855,6 +903,10 @@ video {
 
 .border-gray-900\/10 {
   border-color: rgb(17 24 39 / 0.1);
+}
+
+.border-gray-900\/5 {
+  border-color: rgb(17 24 39 / 0.05);
 }
 
 .border-transparent {
@@ -958,6 +1010,11 @@ video {
   padding-bottom: 3rem;
 }
 
+.py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -995,6 +1052,10 @@ video {
 
 .pb-12 {
   padding-bottom: 3rem;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
 }
 
 .pl-3 {
@@ -1076,6 +1137,10 @@ video {
 
 .leading-6 {
   line-height: 1.5rem;
+}
+
+.leading-7 {
+  line-height: 1.75rem;
 }
 
 .leading-tight {
@@ -1267,6 +1332,11 @@ video {
   color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 
+.hover\:text-indigo-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(79 70 229 / var(--tw-text-opacity));
+}
+
 .hover\:text-indigo-900:hover {
   --tw-text-opacity: 1;
   color: rgb(49 46 129 / var(--tw-text-opacity));
@@ -1428,6 +1498,12 @@ video {
     margin-bottom: calc(4rem * var(--tw-space-y-reverse));
   }
 
+  .sm\:space-y-20 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(5rem * var(--tw-space-y-reverse));
+  }
+
   .sm\:divide-y > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-y-reverse: 0;
     border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -1496,12 +1572,64 @@ video {
 }
 
 @media (min-width: 1024px) {
+  .lg\:mx-0 {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .lg\:block {
+    display: block;
+  }
+
+  .lg\:flex {
+    display: flex;
+  }
+
+  .lg\:w-64 {
+    width: 16rem;
+  }
+
   .lg\:max-w-7xl {
     max-width: 80rem;
+  }
+
+  .lg\:max-w-none {
+    max-width: none;
+  }
+
+  .lg\:flex-auto {
+    flex: 1 1 auto;
+  }
+
+  .lg\:flex-none {
+    flex: none;
+  }
+
+  .lg\:flex-col {
+    flex-direction: column;
+  }
+
+  .lg\:gap-x-16 {
+    -moz-column-gap: 4rem;
+         column-gap: 4rem;
+  }
+
+  .lg\:border-0 {
+    border-width: 0px;
+  }
+
+  .lg\:px-0 {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+
+  .lg\:py-20 {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
   }
 }

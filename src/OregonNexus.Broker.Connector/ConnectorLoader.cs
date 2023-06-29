@@ -23,10 +23,15 @@ public class ConnectorLoader
     {
         IsLoaded = true;
         
+        var logger = LoggerFactory.Create(config =>
+        {
+            config.AddConsole();
+        }).CreateLogger("ConnectorLoader");
+
         var connectorAssemblyPaths = Directory.GetFiles($"{System.AppDomain.CurrentDomain.BaseDirectory}connectors");
         if (connectorAssemblyPaths.Length == 0)
         {
-            //_logger.LogInformation($"No connectors loaded from paths: {connectorAssemblyPaths}");
+            logger.LogInformation($"No connectors loaded from paths: {connectorAssemblyPaths}");
             return;
         }
 
@@ -50,6 +55,7 @@ public class ConnectorLoader
             if (type.GetInterface(nameof(IConnector)) != null)
             {
                 Connectors.Add(type);
+                logger.LogInformation($"Connector loaded: {type.FullName} from {type.AssemblyQualifiedName}");
             }
         }
         

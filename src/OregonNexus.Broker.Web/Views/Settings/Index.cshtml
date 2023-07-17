@@ -1,5 +1,4 @@
-﻿@model List<Type>
-@{
+﻿@{
     // Copyright: 2023 Education Nexus Oregon
     // Author: Makoa Jacobsen, makoa@makoajacobsen.com
     ViewData["Title"] = "Settings";
@@ -29,11 +28,16 @@
         <p class="mt-1 text-sm leading-6 text-gray-500">List of loaded connectors.</p>
 
         <ul role="list" class="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
-          @foreach(var connector in Model)
+          @foreach(var connector in Model.connectors)
           {
           <li class="flex justify-between gap-x-6 py-6">
             <div class="font-medium text-gray-900">@connector.AssemblyQualifiedName</div>
           </li>
+          }
+
+          @foreach(var iconfig in Model.models)
+          {
+            @Html.Raw(iconfig.html)
           }
         </ul>
       </div>

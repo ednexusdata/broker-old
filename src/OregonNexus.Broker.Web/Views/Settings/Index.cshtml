@@ -34,12 +34,12 @@
             <div class="font-medium text-gray-900">@connector.AssemblyQualifiedName</div>
           </li>
           }
+        </ul>
 
-          @foreach(var iconfig in Model.models)
+        @foreach(var iconfig in Model.models)
           {
             @Html.Raw(iconfig.html)
           }
-        </ul>
       </div>
     </div>
   </main>

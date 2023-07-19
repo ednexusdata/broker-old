@@ -46,7 +46,14 @@ public class SettingsController : Controller
             
             Type first = configurationModels.FirstOrDefault();
 
-            var iconfigModel = (OregonNexus.Broker.Connector.Configuration.IConfiguration)ActivatorUtilities.CreateInstance(_serviceProvider, first);
+            var iconfigModel = ActivatorUtilities.CreateInstance(_serviceProvider, first) as OregonNexus.Broker.Connector.Configuration.IConfiguration;
+            
+            var prop = iconfigModel.GetType().GetProperty("SynergyUrl");
+            prop.SetValue(iconfigModel, "https://test.url");
+            prop = iconfigModel.GetType().GetProperty("Username");
+            prop.SetValue(iconfigModel, "TestUser");
+            prop = iconfigModel.GetType().GetProperty("Password");
+            prop.SetValue(iconfigModel, "TestPass");
 
             var html = ModelFormBuilderHelper.HtmlForModel(iconfigModel);
 

@@ -1,0 +1,65 @@
+@model OregonNexus.Broker.Web.Models.UserRolesViewModel
+@using OregonNexus.Broker.Domain
+@{
+    // Copyright: 2023 Education Nexus Oregon
+    // Author: Makoa Jacobsen, makoa@makoajacobsen.com
+    ViewData["Title"] = "User Roles";
+    Layout = "_AuthenticatedLayout";
+}
+
+<div class="">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-base font-semibold leading-6 text-gray-900">Roles for @Model.User.Name</h1>
+      <p class="mt-2 text-sm text-gray-700">List of roles for organizations that have been assigned to this user.</p>
+    </div>
+  </div>
+  <div class="mt-8 flow-root">
+    <div class="overflow-x-auto">
+      <div class="inline-block min-w-full py-2 align-middle">
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr>
+              <th class="grid grid-cols-3">
+                <div class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-left">Organization</div>
+                <div class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-left">Role</div>
+                <div class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">Action</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            @if (Model.EducationOrganizations?.Count() > 0)
+            {
+            <tr>
+              <td>
+                <form asp-action="Create" asp-route-UserId="@Model.UserId" class="grid grid-cols-3">
+                <div class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3"><select asp-for="EducationOrganizationId" asp-items="Model.EducationOrganizations" class="block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"></select></div>
+                <div class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><select asp-for="Role" asp-items="Html.GetEnumSelectList<Role>()" class="block w-full rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"></select></div>
+                <div class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3"><button type="submit" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Add</button></div>
+                </form>
+              </td>
+            </tr>
+            }
+            @{ var even = true; }
+            @foreach(var userRole in Model.UserRoles!)
+            {
+            <tr class="@(even ? "bg-gray-50": "")">
+              <td class="grid grid-cols-3">
+                <div class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@userRole.DisplayText</div>
+                <div class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">@(((System.ComponentModel.DataAnnotations.DisplayAttribute)typeof(Role).GetMember(userRole?.UserRole.Role.ToString()).First().GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false).First()).Name)</div>
+                <div class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
+                  <form method="post" asp-action="Delete" asp-route-id="@userRole.UserRole?.Id">
+                    <input type="hidden" name="_METHOD" value="DELETE" />
+                    <button type="submit" class="inline-flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Delete</button>
+                  </form>    
+                </div>
+              </td>
+            </tr>
+            even = !even;
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

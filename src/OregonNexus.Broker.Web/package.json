@@ -1,25 +1,21 @@
 {
-    "name": "broker",
-    "private": true,
-    "version": "0.0.0",
-    "type": "module",
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview"
-    },
-    "dependencies": {
-        "@headlessui/vue": "^1.7.10",
-        "@heroicons/vue": "^2.0.16",
-        "@inertiajs/core": "^1.0.0",
-        "@inertiajs/vue3": "^1.0.0",
-        "vue": "^3.2.45"
-    },
-    "devDependencies": {
-        "@vitejs/plugin-vue": "^4.0.0",
-        "autoprefixer": "^10.4.13",
-        "postcss": "^8.4.21",
-        "tailwindcss": "^3.2.7",
-        "vite": "^4.1.0"
-    }
+  "name": "oregonnexus.broker.web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "css:build": "npx tailwind build -i ./wwwroot/css/site.css -o ./wwwroot/css/output.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.3.1"
+  },
+  "dependencies": {
+    "alpinejs": "^3.12.0",
+    "jquery": "^3.6.4"
+  }
 }

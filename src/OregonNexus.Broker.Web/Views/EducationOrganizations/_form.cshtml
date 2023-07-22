@@ -1,0 +1,54 @@
+@model OregonNexus.Broker.Web.Models.EducationOrganizationViewModel;
+@using OregonNexus.Broker.Domain;
+<div id="EducationOrganizationForm" x-data="{ educationOrganizationType: '@Model.EducationOrganizationType' }">
+    <div asp-validation-summary="All" class="text-red-600 space-y-8"></div>
+    <div class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
+
+    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+        <label asp-for="EducationOrganizationType" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
+        <div class="mt-2 sm:col-span-2 sm:mt-0">
+        <div class="grid grid-cols-6 gap-3 sm:grid-cols-6">
+        @foreach (var edOrgType in Enum.GetValues<EducationOrganizationType>())
+        {
+        <label :class="(educationOrganizationType == '@edOrgType') ? 'flex items-center justify-center rounded-md py-3 px-3 text-sm font-semibold sm:flex-1 cursor-pointer focus:outline-none bg-indigo-600 text-white hover:bg-indigo-500' : 'flex items-center justify-center rounded-md py-3 px-3 text-sm font-semibold sm:flex-1 cursor-pointer focus:outline-none ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50'">
+            <input id="EducationOrganizationType_@((int)edOrgType)" asp-for="EducationOrganizationType" class="sr-only" type="radio" value="@edOrgType" x-model="educationOrganizationType" aria-labelledby="EducationOrganizationType_@((int)edOrgType)_label" />
+            <span id="EducationOrganizationType_@((int)edOrgType)_label">@edOrgType</span>
+        </label>
+        }
+        </div>
+        <span asp-validation-for="EducationOrganizationType" class="text-red-600"></span>
+        </div>
+    </div>
+
+    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6" x-show="educationOrganizationType == 'School'">
+        <label asp-for="ParentOrganizationId" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
+        <div class="mt-2 sm:col-span-2 sm:mt-0">
+        <select asp-for="ParentOrganizationId" asp-items="Model.Organizations" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"></select>
+        <span asp-validation-for="ParentOrganizationId" class="text-red-600"></span>
+        </div>
+    </div>
+    
+    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+        <label asp-for="Name" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
+        <div class="mt-2 sm:col-span-2 sm:mt-0">
+        <input asp-for="Name" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
+        <span asp-validation-for="Name" class="text-red-600"></span>
+        </div>
+    </div>
+
+    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+        <label asp-for="Number" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
+        <div class="mt-2 sm:col-span-2 sm:mt-0">
+        <input asp-for="Number" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
+        <span asp-validation-for="Number" class="text-red-600"></span>
+        </div>
+    </div>
+
+</div>
+
+<div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+    <div class="mt-2 sm:col-start-2 sm:col-span-2 sm:mt-0">
+        <input asp-for="EducationOrganizationId" type="hidden" />
+        <button type="submit" class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+    </div>
+</div>

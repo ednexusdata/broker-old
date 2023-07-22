@@ -26,12 +26,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        //your js component file name.
-        var componentName = "Welcome";
-        //return whatever you want.
-        var data = new { Id = 1 };
-        //return Inertia Result.
-        return Inertia.Render(componentName, data);
+        return View();
     }
 
     public IActionResult Privacy()

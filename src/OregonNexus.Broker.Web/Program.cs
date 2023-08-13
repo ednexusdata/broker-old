@@ -23,7 +23,8 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 // Add services to the container.
-
+builder.Services.AddHttpContextAccessor();
+//builder.Services.AddScoped<ScopedHttpContext>();
 builder.Services.AddMediatR(typeof(Program).Assembly);
 
 var msSqlConnectionString = builder.Configuration.GetConnectionString("MsSqlBrokerDatabase") ?? throw new InvalidOperationException("Connection string 'MsSqlBrokerDatabase' not found.");
@@ -115,7 +116,7 @@ builder.Services.AddTransient<IClaimsTransformation, BrokerClaimsTransformation>
 builder.Services.AddControllersWithViews();
 builder.Services.AddInertia();
 
-builder.Services.AddSingleton<ICurrentUser, CurrentUserService>();
+builder.Services.AddScoped<ICurrentUser, CurrentUserService>();
 
 builder.Services.AddConnectorLoader();
 builder.Services.AddConnectorDependencies();
@@ -144,6 +145,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+
+//app.UseMiddleware<ScopedHttpContextMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

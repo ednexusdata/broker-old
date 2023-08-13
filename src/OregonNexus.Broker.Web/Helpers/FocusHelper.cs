@@ -80,4 +80,43 @@ public class FocusHelper
 
         return selectListItems;
     }
+
+    public Guid? CurrentEdOrgFocus()
+    {
+        var currentEdOrgFocus = _session.GetString("Focus.EducationOrganization.Current");
+        if (currentEdOrgFocus != "ALL")
+        {
+            return Guid.Parse(currentEdOrgFocus);
+        }
+        return null;
+    }
+
+    public async Task<Guid?> CurrentDistrictEdOrgFocus()
+    {
+        var currentEdOrgFocus = CurrentEdOrgFocus();
+
+        // Check if district
+        if (currentEdOrgFocus.HasValue)
+        {
+            var edOrg = await _edOrgRepo.GetByIdAsync(currentEdOrgFocus.Value);
+            if (edOrg is not null && edOrg.EducationOrganizationType == EducationOrganizationType.District)
+            {
+                return currentEdOrgFocus;
+            }
+        }
+        return null;
+    }
+
+    public bool IsEdOrgAllFocus()
+    {
+        var currentEdOrgFocus = _session.GetString("Focus.EducationOrganization.Current");
+        if (currentEdOrgFocus == "ALL")
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

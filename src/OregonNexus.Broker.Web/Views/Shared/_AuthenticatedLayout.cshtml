@@ -33,7 +33,8 @@
   </nav>
   @if (ViewData["FocusBar"] is not null && bool.Parse(ViewData["FocusBar"].ToString()) == true)
   {
-    <partial name="_FocusPartial"></partial>
+    var focusVM = new FocusViewModel();
+    <partial name="_FocusPartial" model="focusVM"></partial>
   }
   <div class="py-6">
     <header>

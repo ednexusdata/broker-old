@@ -3,7 +3,10 @@
     // Author: Makoa Jacobsen, makoa@makoajacobsen.com
     ViewData["Title"] = "Settings";
     Layout = "_AuthenticatedLayout";
+    ViewData["FocusBar"] = true;
 }
+@if(Model is not null)
+{
 <div class="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8 bg-white">
   <aside class="flex overflow-x-auto border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0">
     <nav class="flex-none px-4 sm:px-6 lg:px-0">
@@ -44,3 +47,4 @@
     </div>
   </main>
 </div>
+}

@@ -42,7 +42,7 @@ public class ConnectorLoader
             var fileInfo = new FileInfo(assemblyPath);
             if (fileInfo.Extension == ".dll")
             {
-                Assembly.LoadFile(assemblyPath);
+                Assembly.LoadFrom(assemblyPath);
             }
         }
 

@@ -1,5 +1,6 @@
 using System.Reflection;
 using OregonNexus.Broker.Connector;
+using OregonNexus.Broker.Connector.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,7 @@ public static class MyConfigServiceCollectionExtensions
     public static IServiceCollection AddConnectorLoader(this IServiceCollection services)
     {
         services.AddSingleton<ConnectorLoader>();
+        services.AddScoped<ConfigurationSerializer>();
         
         return services;
     }

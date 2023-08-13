@@ -18,6 +18,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" version="7.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.*" />
     <PackageReference Include="MediatR" Version="11.1.0" />
 	  <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
@@ -33,7 +34,7 @@
   </ItemGroup>
 
   <Target Name="Tailwind" BeforeTargets="Build">
-    <Exec Command="npm run css:build"/>
+    <Exec Command="npm run css:build" />
   </Target>
 
   <ItemGroup>
@@ -41,15 +42,11 @@
   </ItemGroup>
 
   <Target Name="BuildCopyConnectors" BeforeTargets="Build">
-    <MSBuild 
-      Projects="..\OregonNexus.Broker.Connector.Edupoint.Synergy\OregonNexus.Broker.Connector.Edupoint.Synergy.csproj"
-      Properties="Configuration=$(Configuration)">
+    <MSBuild Projects="..\OregonNexus.Broker.Connector.Edupoint.Synergy\OregonNexus.Broker.Connector.Edupoint.Synergy.csproj" Properties="Configuration=$(Configuration)">
     </MSBuild>
     <Message Text="Executing BuildCopyConnectors task" Importance="High" />
 
-    <Copy
-      SourceFiles="@(Files)"
-      DestinationFolder="$(TargetDir)\connectors" />
+    <Copy SourceFiles="@(Files)" DestinationFolder="$(TargetDir)\connectors" />
 
     <Message Text="Copied build files" Importance="High" />
   </Target>

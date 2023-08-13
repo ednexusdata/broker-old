@@ -4,6 +4,8 @@ using OregonNexus.Broker.Domain.Specifications;
 using OregonNexus.Broker.SharedKernel;
 using IConfiguration = OregonNexus.Broker.Connector.Configuration.IConfiguration;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace OregonNexus.Broker.Web.Helpers;
 
@@ -11,7 +13,10 @@ public class ModelFormBuilderHelper
 {
     public static string HtmlForModel(IConfiguration model)
     {
-        var formHTML = ""; // start form html output
+        var formHTML = $"""
+<form method="post" action="/Settings/Update">
+<input type="hidden" name="ConnectorConfigurationType" value="{model.GetType().AssemblyQualifiedName}">
+"""; // start form html output
 
         // Get type of incoming model
         var modelType = model.GetType();
@@ -24,16 +29,25 @@ public class ModelFormBuilderHelper
 
             // Write HTML
             var modelTypePropAttrsDataType = (DataTypeAttribute)modelTypeProp.GetCustomAttributes(false).Where(x => x.GetType() == typeof(DataTypeAttribute)).FirstOrDefault()!;
+            var modelTypePropAttrsDisplayName = (DisplayNameAttribute)modelTypeProp.GetCustomAttributes(false).Where(x => x.GetType() == typeof(DisplayNameAttribute)).FirstOrDefault()!;
+            var modelTypePropAttrsDescription = (DescriptionAttribute)modelTypeProp.GetCustomAttributes(false).Where(x => x.GetType() == typeof(DescriptionAttribute)).FirstOrDefault()!;
+
+            var displayNameToUse = modelTypeProp.Name;
+            if (modelTypePropAttrsDisplayName is not null)
+            {
+              displayNameToUse = modelTypePropAttrsDisplayName.DisplayName;
+            }
 
             if (modelTypePropAttrsDataType.DataType == DataType.Url)
             {
                 formHTML += $"""
                 <div class="sm:col-span-4 my-4">
-              <label for="{modelTypeProp.Name}" class="block text-sm font-medium leading-6 text-gray-900">{modelTypeProp.Name}</label>
+              <label for="{modelTypeProp.Name}" class="block text-sm font-medium leading-6 text-gray-900">{displayNameToUse}</label>
               <div class="mt-2">
                 <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                  <input type="text" name="{modelTypeProp.Name}" id="{modelTypeProp.Name}" value="{modelTypeProp.GetValue(model)}" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                  <input type="text" autocomplete="off" name="{modelTypeProp.Name}" id="{modelTypeProp.Name}" value="{modelTypeProp.GetValue(model)}" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
+                {modelTypePropAttrsDescription?.Description}
               </div>
               </div>
               """;
@@ -43,11 +57,12 @@ public class ModelFormBuilderHelper
             {
                 formHTML += $"""
                 <div class="sm:col-span-4 my-4">
-              <label for="{modelTypeProp.Name}" class="block text-sm font-medium leading-6 text-gray-900">{modelTypeProp.Name}</label>
+              <label for="{modelTypeProp.Name}" class="block text-sm font-medium leading-6 text-gray-900">{displayNameToUse}</label>
               <div class="mt-2">
                 <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                  <input type="text" name="{modelTypeProp.Name}" id="{modelTypeProp.Name}" value="{modelTypeProp.GetValue(model)}" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                  <input type="text" autocomplete="off" name="{modelTypeProp.Name}" id="{modelTypeProp.Name}" value="{modelTypeProp.GetValue(model)}" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
+                {modelTypePropAttrsDescription?.Description}
               </div>
               </div>
               """;
@@ -55,20 +70,26 @@ public class ModelFormBuilderHelper
 
             if (modelTypePropAttrsDataType.DataType == DataType.Password)
             {
-                var valueExists = (modelTypeProp.GetValue(model) is not null) ? "ValueExists" : "";
                 formHTML += $"""
                 <div class="sm:col-span-4 my-4">
-              <label for="{modelTypeProp.Name}" class="block text-sm font-medium leading-6 text-gray-900">{modelTypeProp.Name}</label>
+              <label for="{modelTypeProp.Name}" class="block text-sm font-medium leading-6 text-gray-900">{displayNameToUse}</label>
               <div class="mt-2">
                 <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                  <input type="password" name="{modelTypeProp.Name}" id="{modelTypeProp.Name}" value="{valueExists}" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                  <input type="password" autocomplete="off" name="{modelTypeProp.Name}" id="{modelTypeProp.Name}" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
+                {modelTypePropAttrsDescription?.Description}
               </div>
               </div>
               """;
             }
         }
-        
+        formHTML += """
+<div class="mt-6 flex items-center justify-end gap-x-6">
+    <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+</div>
+</form>
+""";
         return formHTML; // output form html
     }
 }

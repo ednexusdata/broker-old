@@ -4,6 +4,7 @@ using OregonNexus.Broker.Domain.Specifications;
 using OregonNexus.Broker.Data;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
+using System.Dynamic;
 
 namespace OregonNexus.Broker.Connector.Configuration;
 
@@ -21,6 +22,7 @@ public class ConfigurationSerializer
     public async Task<IConfiguration> DeseralizeAsync(Type connectorConfigType, Guid focusEducationOrganization)
     {
         var iconfigModel = ActivatorUtilities.CreateInstance(_serviceProvider, connectorConfigType) as IConfiguration;
+        var objTypeName = iconfigModel.GetType().FullName;
         
         // Get existing object
         if (connectorConfigType.Assembly.GetName().Name! != null) {
@@ -30,10 +32,12 @@ public class ConfigurationSerializer
             {
                 var configSettings = Newtonsoft.Json.Linq.JObject.Parse(repoConnectorSettings.Settings);
 
+                var configSettingsObj = configSettings[objTypeName];
+
                 foreach(var prop in iconfigModel!.GetType().GetProperties())
                 {
                     // Check if prop in configSettings
-                    var value = configSettings.Value<string>(prop.Name);
+                    var value = configSettingsObj.Value<string>(prop.Name);
                     if (value is not null)
                     {
                         prop.SetValue(iconfigModel, value);
@@ -56,11 +60,16 @@ public class ConfigurationSerializer
         var repoConnectorSettings = new EducationOrganizationConnectorSettings();
 
         var objType = obj.GetType();
-        var objTypeName = objType.Assembly.GetName().Name!;
+        var objTypeName = objType.FullName;
+        var objAssemblyName = objType.Assembly.GetName().Name!;
 
         // Get existing record, if there is one
-        var connectorSpec = new ConnectorByNameAndEdOrgIdSpec(objTypeName, focusEducationOrganization);
-        repoConnectorSettings = await _repo.FirstOrDefaultAsync(connectorSpec);
+        var connectorSpec = new ConnectorByNameAndEdOrgIdSpec(objAssemblyName, focusEducationOrganization);
+        var prevRepoConnectorSettings = await _repo.FirstOrDefaultAsync(connectorSpec);
+        if (prevRepoConnectorSettings is not null)
+        {
+            repoConnectorSettings = prevRepoConnectorSettings;
+        }
 
         // Merge to existing object, if exists
         // if (repoConnectorSettings.Settings != null)
@@ -72,18 +81,20 @@ public class ConfigurationSerializer
         //     }
         //     obj = deseralizedSettings;
         // }
-
         // Serialize settings object
-        var seralizedIConfigModel = JsonSerializer.Serialize<dynamic>(obj);
+        dynamic objWrapper = new ExpandoObject();
+        ((IDictionary<String, Object>)objWrapper)[objTypeName] = obj;
+
+        var seralizedIConfigModel = JsonSerializer.Serialize<dynamic>(objWrapper);
         repoConnectorSettings.Settings = seralizedIConfigModel;
 
-        if (objTypeName != null && repoConnectorSettings.Id != Guid.Empty) {
+        if (objAssemblyName != null && repoConnectorSettings.Id != Guid.Empty) {
             await _repo.UpdateAsync(repoConnectorSettings);
         }
         else
         {
             repoConnectorSettings.EducationOrganizationId = focusEducationOrganization;
-            repoConnectorSettings.Connector = objTypeName;
+            repoConnectorSettings.Connector = objAssemblyName;
             await _repo.AddAsync(repoConnectorSettings);
         }
 

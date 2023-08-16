@@ -15,7 +15,7 @@ public class Connection : IConfiguration
     [Description("The username of the user to connect to the Synergy instance specified in Synergy URL.")]
     public string Username { get; set; } = default!;
 
-    [DataType(DataType.Password)]
+    [DataType(DataType.Text)]
     [Description("The password of the user to connect to the Synergy instance specified in Synergy URL.")]
     public string Password { get; set; } = default!;
 }

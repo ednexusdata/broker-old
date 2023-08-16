@@ -29,6 +29,8 @@ public class SettingsController : Controller
     private readonly IRepository<EducationOrganizationConnectorSettings> _repo;
     private readonly FocusHelper _focusHelper;
 
+    private Guid? _focusedDistrictEdOrg { get; set; }
+
     public SettingsController(ConnectorLoader connectorLoader, IServiceProvider serviceProvider, IRepository<EducationOrganizationConnectorSettings> repo, FocusHelper focusHelper, ConfigurationSerializer configurationSerializer)
     {
         ArgumentNullException.ThrowIfNull(connectorLoader);
@@ -42,12 +44,7 @@ public class SettingsController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var currentEdOrgFocus = await _focusHelper.CurrentDistrictEdOrgFocus();
-        if (!currentEdOrgFocus.HasValue)
-        {
-            TempData["Error"] = $"Must be focused to a district.";
-            return View();
-        }
+        if (await FocusedToDistrict() is not null) return View();
         
         var connectors = _connectorLoader.Connectors;
 
@@ -55,40 +52,35 @@ public class SettingsController : Controller
             ConnectorTypes = connectors
         };
 
-        foreach(var connector in connectors)
-        {
-            var configurationModels = connector.Assembly.GetTypes().Where(t => typeof(OregonNexus.Broker.Connector.Configuration.IConfiguration).IsAssignableFrom(t));
-            
-            Type first = configurationModels.FirstOrDefault();
-
-            var iconfigModel = await _configurationSerializer.DeseralizeAsync(first, currentEdOrgFocus.Value);
-
-            var html = ModelFormBuilderHelper.HtmlForModel(iconfigModel);
-
-            var toSave = new { model = first, html = html };
-
-            settingsViewModel.Models.Add(toSave);
-        }
-
         return View(settingsViewModel);
+    }
+
+    [HttpGet("/Settings/Configuration/{assemblyQualifiedName}")]
+    public async Task<IActionResult> Configuration(string assemblyQualifiedName)
+    {
+        if (await FocusedToDistrict() is not null) return await FocusedToDistrict();
+        
+        assemblyQualifiedName = "OregonNexus.Broker.Connector.Edupoint.Synergy.Configuration.Connection, OregonNexus.Broker.Connector.Edupoint.Synergy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+
+        // Get Connector Config Type
+        Type connectorConfigType = Type.GetType(assemblyQualifiedName!, true)!;
+
+        var iconfigModel = await _configurationSerializer.DeseralizeAsync(connectorConfigType, _focusedDistrictEdOrg.Value);
+        
+        return View(new { form = ModelFormBuilderHelper.HtmlForModel(iconfigModel) });
     }
 
     [HttpPost]
     public async Task<IActionResult> Update(IFormCollection collection)
     {
-        var currentEdOrgFocus = await _focusHelper.CurrentDistrictEdOrgFocus();
-        if (!currentEdOrgFocus.HasValue)
-        {
-            TempData["Error"] = $"Must be focused to a district.";
-            return RedirectToAction("Index");
-        }
+        if (await FocusedToDistrict() is not null) return await FocusedToDistrict();
 
         var assemblyQualifiedName = collection["ConnectorConfigurationType"];
 
         // Get Connector Config Type
         Type connectorConfigType = Type.GetType(assemblyQualifiedName!, true)!;
 
-        var iconfigModel = await _configurationSerializer.DeseralizeAsync(connectorConfigType, currentEdOrgFocus.Value);
+        var iconfigModel = await _configurationSerializer.DeseralizeAsync(connectorConfigType, _focusedDistrictEdOrg.Value);
 
         // Loop through properties and set from form
         foreach(var prop in iconfigModel.GetType().GetProperties())
@@ -96,10 +88,26 @@ public class SettingsController : Controller
             prop.SetValue(iconfigModel, collection[prop.Name].ToString());
         }
 
-        await _configurationSerializer.SerializeAndSaveAsync(iconfigModel, currentEdOrgFocus.Value);
+        await _configurationSerializer.SerializeAndSaveAsync(iconfigModel, _focusedDistrictEdOrg.Value);
 
         TempData["Success"] = $"Updated Settings.";
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Configuration", new { assemblyQualifiedName = connectorConfigType.FullName });
+    }
+
+    private async Task<IActionResult?> FocusedToDistrict()
+    {
+        if (_focusedDistrictEdOrg == null)
+        {
+            _focusedDistrictEdOrg = await _focusHelper.CurrentDistrictEdOrgFocus();
+        }
+        
+        if (!_focusedDistrictEdOrg.HasValue)
+        {
+            TempData["Error"] = $"Must be focused to a district.";
+            return RedirectToAction("Index");
+        }
+
+        return null;
     }
 }

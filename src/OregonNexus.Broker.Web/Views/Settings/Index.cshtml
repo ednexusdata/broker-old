@@ -7,7 +7,7 @@
 @if(Model is not null)
 {
 <div>
-  <h2 class="text-base font-semibold leading-7 text-gray-900">Configuration</h2>
+  <h2 class="text-base font-semibold leading-7 text-gray-900">Connectors</h2>
   <p class="mt-1 text-sm leading-6 text-gray-500">List of loaded connectors.</p>
 
   <ul role="list" class="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
@@ -18,10 +18,5 @@
     </li>
     }
   </ul>
-
-  @foreach(var iconfig in Model.Models)
-    {
-      @Html.Raw(iconfig.html)
-    }
 </div>
 }

@@ -51,9 +51,9 @@ public class SettingsController : Controller
         
         var connectors = _connectorLoader.Connectors;
 
-        dynamic mymodel = new ExpandoObject();
-        mymodel.connectors = connectors;
-        mymodel.models = new List<Object>();
+        var settingsViewModel = new SettingsViewModel() {
+            ConnectorTypes = connectors
+        };
 
         foreach(var connector in connectors)
         {
@@ -67,20 +67,20 @@ public class SettingsController : Controller
 
             var toSave = new { model = first, html = html };
 
-            mymodel.models.Add(toSave);
+            settingsViewModel.Models.Add(toSave);
         }
 
-        return View(mymodel);
+        return View(settingsViewModel);
     }
 
     [HttpPost]
     public async Task<IActionResult> Update(IFormCollection collection)
     {
         var currentEdOrgFocus = await _focusHelper.CurrentDistrictEdOrgFocus();
-        if (currentEdOrgFocus.HasValue)
+        if (!currentEdOrgFocus.HasValue)
         {
             TempData["Error"] = $"Must be focused to a district.";
-            return View();
+            return RedirectToAction("Index");
         }
 
         var assemblyQualifiedName = collection["ConnectorConfigurationType"];

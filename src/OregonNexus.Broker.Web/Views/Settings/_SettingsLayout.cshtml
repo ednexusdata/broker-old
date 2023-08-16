@@ -1,4 +1,3 @@
-@model OregonNexus.Broker.Web.Models.SettingsViewModel;
 @{
     // Copyright: 2023 Education Nexus Oregon
     // Author: Makoa Jacobsen, makoa@makoajacobsen.com
@@ -6,10 +5,9 @@
     Layout = "_AuthenticatedLayout";
     ViewData["FocusBar"] = true;
 }
-@if(Model is not null)
-{
 <div class="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8 bg-white">
-  
+  @if (Model is not null)
+  {
   <partial name="_Sidebar" />
 
   <main class="px-4 py-4 sm:px-6 lg:flex-auto lg:px-0 lg:py-4">
@@ -17,5 +15,9 @@
       @RenderBody()
     </div>
   </main>
+  }
+  else
+  {
+    @RenderBody()
+  }  
 </div>
-}

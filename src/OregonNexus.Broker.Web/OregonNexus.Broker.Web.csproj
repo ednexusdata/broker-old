@@ -39,10 +39,21 @@
 
   <ItemGroup>
     <Files Include="..\OregonNexus.Broker.Connector.*\bin\**\OregonNexus.Broker.Connector.Edupoint.Synergy.*" />
+    <Files Include="..\OregonNexus.Broker.Connector.*\bin\**\OregonNexus.Broker.Connector.EdFiAlliance.EdFi.*" />
   </ItemGroup>
 
   <Target Name="BuildCopyConnectors" BeforeTargets="Build">
     <MSBuild Projects="..\OregonNexus.Broker.Connector.Edupoint.Synergy\OregonNexus.Broker.Connector.Edupoint.Synergy.csproj" Properties="Configuration=$(Configuration)">
+    </MSBuild>
+    <Message Text="Executing BuildCopyConnectors task" Importance="High" />
+
+    <Copy SourceFiles="@(Files)" DestinationFolder="$(TargetDir)\connectors" />
+
+    <Message Text="Copied build files" Importance="High" />
+  </Target>
+
+  <Target Name="BuildCopyConnectors" BeforeTargets="Build">
+    <MSBuild Projects="..\OregonNexus.Broker.Connector.EdFiAlliance.EdFi\OregonNexus.Broker.Connector.EdFiAlliance.EdFi.csproj" Properties="Configuration=$(Configuration)">
     </MSBuild>
     <Message Text="Executing BuildCopyConnectors task" Importance="High" />
 

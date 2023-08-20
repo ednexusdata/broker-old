@@ -16,13 +16,13 @@
         <li>
           @if(config.Selected)
           {
-            <a asp-controller="Settings" asp-action="Configuration" asp-route-connectorFullName="@config.ConnectorTypeName" class="text-indigo-700 bg-gray-50 text-indigo-600 group flex gap-x-3 py-2 pl-2 pr-3 text-sm leading-6 font-semibold">
+            <a asp-controller="Settings" asp-action="Configuration" asp-route-assembly="@config.ConnectorTypeName" class="text-indigo-700 bg-gray-50 text-indigo-600 group flex gap-x-3 py-2 pl-2 pr-3 text-sm leading-6 font-semibold">
             @config.DisplayName
             </a>
           }
           else
           {
-            <a asp-controller="Settings" asp-action="Configuration" asp-route-connectorFullName="@config.ConnectorTypeName" class="text-indigo-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 py-2 pl-2 pr-3 text-sm leading-6 font-semibold">
+            <a asp-controller="Settings" asp-action="Configuration" asp-route-assembly="@config.ConnectorTypeName" class="text-indigo-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 py-2 pl-2 pr-3 text-sm leading-6 font-semibold">
             @config.DisplayName
             </a>
           }

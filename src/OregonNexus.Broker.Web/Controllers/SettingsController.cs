@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Dynamic;
 using System.Reflection;
 using System.Text;
@@ -55,23 +56,34 @@ public class SettingsController : Controller
         return View(settingsViewModel);
     }
 
-    [HttpGet("/Settings/Configuration/{connectorFullName}")]
-    public async Task<IActionResult> Configuration(string connectorFullName)
+    [HttpGet("/Settings/Configuration/{assembly}")]
+    public async Task<IActionResult> Configuration(string assembly)
     {
         if (await FocusedToDistrict() is not null) return await FocusedToDistrict();
-        
-        if (connectorFullName == "OregonNexus.Broker.Connector.Edupoint.Synergy.Connector")
-            connectorFullName = "OregonNexus.Broker.Connector.Edupoint.Synergy.Configuration.Connection, OregonNexus.Broker.Connector.Edupoint.Synergy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-        
-        if (connectorFullName == "OregonNexus.Broker.Connector.EdFiAlliance.EdFi.Connector")
-            connectorFullName = "OregonNexus.Broker.Connector.EdFiAlliance.EdFi.Configuration.Connection, OregonNexus.Broker.Connector.EdFiAlliance.EdFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-        
-        // Get Connector Config Type
-        Type connectorConfigType = Type.GetType(connectorFullName!, true)!;
 
-        var iconfigModel = await _configurationSerializer.DeseralizeAsync(connectorConfigType, _focusedDistrictEdOrg.Value);
+        var connectorDictionary = _connectorLoader.Assemblies.Where(x => x.Key == assembly).FirstOrDefault();
+        ArgumentException.ThrowIfNullOrEmpty(assembly);
+        var connector = connectorDictionary.Value;
+
+        // Get configurations for connector - TO FIX!
+        var configurations = _connectorLoader.GetConfigurations(connector);
+
+        var forms = new List<dynamic>();
+
+        foreach(var configType in configurations)
+        {
+            var configModel = await _configurationSerializer.DeseralizeAsync(configType, _focusedDistrictEdOrg.Value);
+            var displayName = (DisplayNameAttribute)configType.GetCustomAttributes(false).Where(x => x.GetType() == typeof(DisplayNameAttribute)).FirstOrDefault()!;
+
+            forms.Add(
+                new { 
+                    displayName = displayName.DisplayName, 
+                    html = ModelFormBuilderHelper.HtmlForModel(configModel) 
+                }
+            );
+        }
         
-        return View(new { form = ModelFormBuilderHelper.HtmlForModel(iconfigModel) });
+        return View(forms);
     }
 
     [HttpPost]
@@ -96,7 +108,7 @@ public class SettingsController : Controller
 
         TempData["Success"] = $"Updated Settings.";
 
-        return RedirectToAction("Configuration", new { assemblyQualifiedName = connectorConfigType.FullName });
+        return RedirectToAction("Configuration", new { assembly = connectorConfigType.Assembly.GetName().Name });
     }
 
     private async Task<IActionResult?> FocusedToDistrict()

@@ -4,6 +4,7 @@ using OregonNexus.Broker.Connector.Configuration;
 
 namespace OregonNexus.Broker.Connector.Edupoint.Synergy.Configuration;
 
+[DisplayName("Connection")]
 public class Connection : IConfiguration
 {
     [DataType(DataType.Url)]

@@ -22,11 +22,15 @@ public class SettingsSidebarViewComponent : ViewComponent
 
         foreach(var connector in connectors)
         {   
-            viewModel.Connectors.Add(new SettingsSidebarViewModel.ConnectorSidebarViewModel() {
-                DisplayName = ((DisplayNameAttribute)connector.GetCustomAttributes(false).Where(x => x.GetType() == typeof(DisplayNameAttribute)).FirstOrDefault()!).DisplayName,
-                ConnectorTypeName = connector.FullName!,
-                Selected = (selectedView == connector.FullName!) ? true : false
-            });
+            if (connector is not null)
+            {
+                viewModel.Connectors.Add(new SettingsSidebarViewModel.ConnectorSidebarViewModel() {
+                    DisplayName = ((DisplayNameAttribute)connector.GetCustomAttributes(false).Where(x => x.GetType() == typeof(DisplayNameAttribute)).FirstOrDefault()!).DisplayName,
+                    ConnectorTypeName = connector.Assembly.GetName().Name!,
+                    Selected = (selectedView == connector.Assembly.GetName().Name) ? true : false
+                });
+            }
+            
         }
 
         return View(viewModel);

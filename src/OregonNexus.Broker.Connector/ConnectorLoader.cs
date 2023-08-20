@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace OregonNexus.Broker.Connector;
@@ -9,6 +10,11 @@ public class ConnectorLoader
 
     public List<Type> Connectors { get; private set; } = new List<Type>();
 
+    public Dictionary<string, Assembly> Assemblies { get; private set; } = new Dictionary<string, Assembly>();
+
+    public Dictionary<string, string> ConnectorIndex { get; private set; } = new Dictionary<string, string>();
+    public Dictionary<string, string> ConfigurationIndex { get; private set; } = new Dictionary<string, string>();
+
     public bool IsLoaded { get; set; } = false;
 
     public ConnectorLoader()
@@ -16,10 +22,16 @@ public class ConnectorLoader
         if (IsLoaded == false)
         {
             LoadConnectorAssemblies();
+            LoadConfigurations();
         }
     }
 
-    public void LoadConnectorAssemblies()
+    public List<Type>? GetConfigurations(Assembly assembly)
+    {
+        return assembly.GetTypes().Where(x => x.GetInterface(nameof(Configuration.IConfiguration)) is not null).ToList();
+    }
+
+    private void LoadConnectorAssemblies()
     {
         IsLoaded = true;
         
@@ -55,9 +67,27 @@ public class ConnectorLoader
             if (type.GetInterface(nameof(IConnector)) != null)
             {
                 Connectors.Add(type);
+                Assemblies.Add(type.Assembly.GetName().Name!, type.Assembly);
+                ConnectorIndex.Add(type.FullName!, type.AssemblyQualifiedName!);
+                
                 logger.LogInformation($"Connector loaded: {type.FullName} from {type.AssemblyQualifiedName}");
             }
         }
         
+    }
+
+    private void LoadConfigurations()
+    {
+        foreach(var connector in Connectors)
+        {
+            var configurations = connector.Assembly.GetTypes().Where(p => p.GetInterface(nameof(Configuration.IConfiguration)) is not null);
+            if (configurations.Count() > 0)
+            {
+                foreach(var config in configurations)
+                {
+                    ConfigurationIndex.Add(config.FullName!, connector.AssemblyQualifiedName!);
+                }
+            }
+        }
     }
 }

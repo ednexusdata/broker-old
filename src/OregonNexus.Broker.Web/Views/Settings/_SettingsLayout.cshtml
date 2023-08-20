@@ -4,7 +4,7 @@
     ViewData["Title"] = "Settings";
     Layout = "_AuthenticatedLayout";
     ViewData["FocusBar"] = true;
-    var selectedView = Context.Request.RouteValues.Where(x => x.Key == "connectorFullName").FirstOrDefault().Value;
+    var selectedView = Context.Request.RouteValues.Where(x => x.Key == "assembly" || x.Key == "payload").FirstOrDefault().Value;
 }
 <div class="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8 bg-white">
   @if (Model is not null)

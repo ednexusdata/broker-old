@@ -1,28 +1,37 @@
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using OregonNexus.Broker.Connector.Payload;
 
 namespace OregonNexus.Broker.Connector;
 
 public class ConnectorLoader
 {
-    //private readonly ILogger<ConnectorLoader> _logger;
-
     public List<Type> Connectors { get; private set; } = new List<Type>();
+    public List<Type> Payloads { get; private set; } = new List<Type>();
 
     public Dictionary<string, Assembly> Assemblies { get; private set; } = new Dictionary<string, Assembly>();
 
     public Dictionary<string, string> ConnectorIndex { get; private set; } = new Dictionary<string, string>();
     public Dictionary<string, string> ConfigurationIndex { get; private set; } = new Dictionary<string, string>();
+    
 
     public bool IsLoaded { get; set; } = false;
 
+    private ILogger<ConnectorLoader> _logger;
+
     public ConnectorLoader()
     {
+        _logger = LoggerFactory.Create(config =>
+        {
+            config.AddConsole();
+        }).CreateLogger<ConnectorLoader>();
+        
         if (IsLoaded == false)
         {
             LoadConnectorAssemblies();
             LoadConfigurations();
+            LoadPayloads();
         }
     }
 
@@ -31,19 +40,31 @@ public class ConnectorLoader
         return assembly.GetTypes().Where(x => x.GetInterface(nameof(Configuration.IConfiguration)) is not null).ToList();
     }
 
+    private void LoadPayloads()
+    {
+        var types = AppDomain.CurrentDomain.GetAssemblies()
+                        .SelectMany(s => s.GetTypes())
+                        .Where(p => p.GetInterface(nameof(IPayload)) is not null);
+
+        foreach(var type in types)
+        {
+            if (type.GetInterface(nameof(IPayload)) is not null && type.IsAbstract == false)
+            {
+                Payloads.Add(type);
+                
+                _logger.LogInformation($"Payload loaded: {type.FullName} from {type.AssemblyQualifiedName}");
+            }
+        }
+    }
+
     private void LoadConnectorAssemblies()
     {
         IsLoaded = true;
-        
-        var logger = LoggerFactory.Create(config =>
-        {
-            config.AddConsole();
-        }).CreateLogger("ConnectorLoader");
 
         var connectorAssemblyPaths = Directory.GetFiles($"{System.AppDomain.CurrentDomain.BaseDirectory}connectors");
         if (connectorAssemblyPaths.Length == 0)
         {
-            logger.LogInformation($"No connectors loaded from paths: {connectorAssemblyPaths}");
+            _logger.LogInformation($"No connectors loaded from paths: {connectorAssemblyPaths}");
             return;
         }
 
@@ -70,7 +91,7 @@ public class ConnectorLoader
                 Assemblies.Add(type.Assembly.GetName().Name!, type.Assembly);
                 ConnectorIndex.Add(type.FullName!, type.AssemblyQualifiedName!);
                 
-                logger.LogInformation($"Connector loaded: {type.FullName} from {type.AssemblyQualifiedName}");
+                _logger.LogInformation($"Connector loaded: {type.FullName} from {type.AssemblyQualifiedName}");
             }
         }
         

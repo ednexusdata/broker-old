@@ -33,6 +33,21 @@ public class SettingsSidebarViewComponent : ViewComponent
             
         }
 
+        var payloads = _connectorLoader.Payloads;
+
+        foreach(var payload in payloads)
+        {   
+            if (payload is not null)
+            {
+                viewModel.Payloads.Add(new SettingsSidebarViewModel.PayloadSidebarViewModel() {
+                    DisplayName = ((DisplayNameAttribute)payload.GetCustomAttributes(false).Where(x => x.GetType() == typeof(DisplayNameAttribute)).FirstOrDefault()!).DisplayName,
+                    PayloadTypeName = payload.Name,
+                    Selected = (selectedView == payload.Name) ? true : false
+                });
+            }
+            
+        }
+
         return View(viewModel);
     }
 

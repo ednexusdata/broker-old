@@ -86,6 +86,38 @@ public class SettingsController : Controller
         return View(forms);
     }
 
+    [HttpGet("/Settings/Payload/{payload}")]
+    public async Task<IActionResult> Payload(string payload)
+    {
+        if (await FocusedToDistrict() is not null) return await FocusedToDistrict();
+        /*
+        var connectorDictionary = _connectorLoader.Assemblies.Where(x => x.Key == assembly).FirstOrDefault();
+        ArgumentException.ThrowIfNullOrEmpty(assembly);
+        var connector = connectorDictionary.Value;
+
+        // Get configurations for connector - TO FIX!
+        var configurations = _connectorLoader.GetConfigurations(connector);
+
+        var forms = new List<dynamic>();
+
+        foreach(var configType in configurations)
+        {
+            var configModel = await _configurationSerializer.DeseralizeAsync(configType, _focusedDistrictEdOrg.Value);
+            var displayName = (DisplayNameAttribute)configType.GetCustomAttributes(false).Where(x => x.GetType() == typeof(DisplayNameAttribute)).FirstOrDefault()!;
+
+            forms.Add(
+                new { 
+                    displayName = displayName.DisplayName, 
+                    html = ModelFormBuilderHelper.HtmlForModel(configModel) 
+                }
+            );
+        }
+
+        return View(forms);
+        */
+        return View(new { Payload = payload });
+    }
+
     [HttpPost]
     public async Task<IActionResult> Update(IFormCollection collection)
     {

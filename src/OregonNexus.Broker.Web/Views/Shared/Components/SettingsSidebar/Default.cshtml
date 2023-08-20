@@ -33,17 +33,23 @@
             Outgoing Payloads
           </div>
         </li>
+        @foreach(var payload in Model.Payloads)
+        {
         <li>
-          <a href="#" class="text-indigo-900 group flex gap-x-3 py-2 pl-2 pr-3 text-sm leading-6 font-semibold">
-            Student Cumulative Record Transfer
-          </a>
+          @if(payload.Selected)
+          {
+            <a asp-controller="Settings" asp-action="Payload" asp-route-payload="@payload.PayloadTypeName" class="text-indigo-700 bg-gray-50 text-indigo-600 group flex gap-x-3 py-2 pl-2 pr-3 text-sm leading-6 font-semibold">
+              @payload.DisplayName
+            </a>
+          }
+          else
+          {
+            <a asp-controller="Settings" asp-action="Payload" asp-route-payload="@payload.PayloadTypeName" class="text-indigo-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 py-2 pl-2 pr-3 text-sm leading-6 font-semibold">
+              @payload.DisplayName
+            </a>
+          }
         </li>
-        <li>
-          <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
-          <a href="#" class="text-indigo-900 group flex gap-x-3 py-2 pl-2 pr-3 text-sm leading-6 font-semibold">
-            Higher-Ed Transcript
-          </a>
-        </li>
+        }
         <li>
           <div class="text-indigo-300 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold">
             Mapping

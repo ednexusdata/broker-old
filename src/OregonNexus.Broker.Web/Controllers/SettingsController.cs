@@ -55,19 +55,19 @@ public class SettingsController : Controller
         return View(settingsViewModel);
     }
 
-    [HttpGet("/Settings/Configuration/{assemblyQualifiedName}")]
-    public async Task<IActionResult> Configuration(string assemblyQualifiedName)
+    [HttpGet("/Settings/Configuration/{connectorFullName}")]
+    public async Task<IActionResult> Configuration(string connectorFullName)
     {
         if (await FocusedToDistrict() is not null) return await FocusedToDistrict();
         
-        if (assemblyQualifiedName == "OregonNexus.Broker.Connector.Edupoint.Synergy.Configuration.Connection")
-            assemblyQualifiedName = "OregonNexus.Broker.Connector.Edupoint.Synergy.Configuration.Connection, OregonNexus.Broker.Connector.Edupoint.Synergy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+        if (connectorFullName == "OregonNexus.Broker.Connector.Edupoint.Synergy.Connector")
+            connectorFullName = "OregonNexus.Broker.Connector.Edupoint.Synergy.Configuration.Connection, OregonNexus.Broker.Connector.Edupoint.Synergy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
         
-        if (assemblyQualifiedName == "OregonNexus.Broker.Connector.EdFiAlliance.EdFi.Configuration.Connection")
-            assemblyQualifiedName = "OregonNexus.Broker.Connector.EdFiAlliance.EdFi.Configuration.Connection, OregonNexus.Broker.Connector.EdFiAlliance.EdFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+        if (connectorFullName == "OregonNexus.Broker.Connector.EdFiAlliance.EdFi.Connector")
+            connectorFullName = "OregonNexus.Broker.Connector.EdFiAlliance.EdFi.Configuration.Connection, OregonNexus.Broker.Connector.EdFiAlliance.EdFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
         
         // Get Connector Config Type
-        Type connectorConfigType = Type.GetType(assemblyQualifiedName!, true)!;
+        Type connectorConfigType = Type.GetType(connectorFullName!, true)!;
 
         var iconfigModel = await _configurationSerializer.DeseralizeAsync(connectorConfigType, _focusedDistrictEdOrg.Value);
         

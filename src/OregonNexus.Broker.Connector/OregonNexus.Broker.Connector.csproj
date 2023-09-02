@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OregonNexus.Broker.Domain\OregonNexus.Broker.Domain.csproj" />
-    <ProjectReference Include="..\OregonNexus.Broker.Data\OregonNexus.Broker.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

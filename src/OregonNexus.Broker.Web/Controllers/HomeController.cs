@@ -7,6 +7,7 @@ using OregonNexus.Broker.Web.Models;
 using OregonNexus.Broker.Domain;
 using OregonNexus.Broker.SharedKernel;
 using Microsoft.AspNetCore.Authorization;
+using InertiaAdapter;
 
 namespace OregonNexus.Broker.Web.Controllers;
 

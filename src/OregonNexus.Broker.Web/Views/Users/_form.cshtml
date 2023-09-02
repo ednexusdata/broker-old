@@ -1,0 +1,53 @@
+@using OregonNexus.Broker.Domain;
+@model OregonNexus.Broker.Web.Models.UserViewModel
+    <div>
+      <div asp-validation-summary="All" class="text-red-600 space-y-8"></div>
+      <div class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
+        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+          <label asp-for="FirstName" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
+          <div class="mt-2 sm:col-span-2 sm:mt-0">
+            <input asp-for="FirstName" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
+            <span asp-validation-for="FirstName" class="text-red-600"></span>
+          </div>
+        </div>
+
+        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+          <label asp-for="LastName" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
+          <div class="mt-2 sm:col-span-2 sm:mt-0">
+            <input asp-for="LastName" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
+            <span asp-validation-for="LastName" class="text-red-600"></span>
+          </div>
+        </div>
+
+        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+          <label asp-for="Email" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
+          <div class="mt-2 sm:col-span-2 sm:mt-0">
+            <input asp-for="Email" type="email" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-md sm:text-sm sm:leading-6" />
+            <span asp-validation-for="Email" class="text-red-600"></span>
+          </div>
+        </div>
+
+        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+          <label asp-for="AllEducationOrganizations" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
+          <div class="mt-2 sm:col-span-2 sm:mt-0">
+            <select asp-for="AllEducationOrganizations" asp-items="Html.GetEnumSelectList<PermissionType>()" class="block w-full rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"></select>
+            <span asp-validation-for="AllEducationOrganizations" class="text-red-600"></span>
+          </div>
+        </div>
+
+        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+          <label asp-for="IsSuperAdmin" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"></label>
+          <div class="mt-2 sm:col-span-2 sm:mt-0">
+            <input asp-for="IsSuperAdmin" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600" />
+            <span asp-validation-for="IsSuperAdmin" class="text-red-600"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+    <div class="mt-2 sm:col-start-2 sm:col-span-2 sm:mt-0">
+        <input asp-for="UserId" type="hidden" />
+        <button type="submit" class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+    </div>
+  </div>

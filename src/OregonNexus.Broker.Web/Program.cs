@@ -9,6 +9,13 @@ using OregonNexus.Broker.SharedKernel;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using InertiaAdapter.Extensions;
+using OregonNexus.Broker.Web;
+using OregonNexus.Broker.Web.Services;
+using System.Reflection;
+using OregonNexus.Broker.Domain;
+using Microsoft.AspNetCore.Authentication;
+using OregonNexus.Broker.Connector;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +23,8 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 // Add services to the container.
-
+builder.Services.AddHttpContextAccessor();
+//builder.Services.AddScoped<ScopedHttpContext>();
 builder.Services.AddMediatR(typeof(Program).Assembly);
 
 var msSqlConnectionString = builder.Configuration.GetConnectionString("MsSqlBrokerDatabase") ?? throw new InvalidOperationException("Connection string 'MsSqlBrokerDatabase' not found.");
@@ -43,11 +51,17 @@ builder.Services.AddDbContext<BrokerDbContext>(options => {
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped(typeof(IMediator), typeof(Mediator));
 
+foreach(var assembly in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "OregonNexus.Broker.Web.Helpers", StringComparison.Ordinal)).ToArray())
+{
+    builder.Services.AddScoped(assembly, assembly);
+}
+
 builder.Services.AddIdentity<IdentityUser<Guid>, IdentityRole<Guid>>(options =>
 {
     options.User.RequireUniqueEmail = false;
 })
-.AddEntityFrameworkStores<BrokerDbContext>();
+.AddEntityFrameworkStores<BrokerDbContext>()
+.AddTokenProvider<DataProtectorTokenProvider<IdentityUser<Guid>>>(TokenOptions.DefaultProvider);
 
 builder.Services.ConfigureApplicationCookie(options => 
 {
@@ -84,7 +98,28 @@ builder.Services.AddAuthentication()
     }
 );
 
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("SuperAdmin",
+      policy => policy.RequireClaim("SuperAdmin", "true")
+    );
+
+    options.AddPolicy("AllEducationOrganizations",
+      policy => policy.RequireClaim("AllEducationOrganizations", PermissionType.Read.ToString(), PermissionType.Write.ToString())
+    );
+
+    options.AddPolicy("TransferRecords",
+      policy => policy.RequireClaim("TransferRecords", "true")
+    );
+});
+builder.Services.AddTransient<IClaimsTransformation, BrokerClaimsTransformation>();
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddInertia();
+
+builder.Services.AddScoped<ICurrentUser, CurrentUserService>();
+
+builder.Services.AddConnectorLoader();
+builder.Services.AddConnectorDependencies();
 
 var app = builder.Build();
 
@@ -98,12 +133,20 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseInertia();
+
+app.UseHttpMethodOverride(new HttpMethodOverrideOptions()
+{
+    FormFieldName = "_METHOD"
+});
 
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+
+//app.UseMiddleware<ScopedHttpContextMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

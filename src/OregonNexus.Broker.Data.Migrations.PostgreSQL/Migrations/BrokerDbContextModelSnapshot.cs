@@ -17,7 +17,7 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -224,7 +224,7 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("EducationOrganizationId");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedBy")
@@ -243,7 +243,7 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
                     b.Property<Guid?>("ParentOrganizationId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UpdatedBy")
@@ -256,17 +256,61 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
                     b.ToTable("EducationOrganizations");
                 });
 
+            modelBuilder.Entity("OregonNexus.Broker.Domain.EducationOrganizationConnectorSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("EducationOrganizationConnectorSettingsId");
+
+                    b.Property<string>("Connector")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("EducationOrganizationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Settings")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EducationOrganizationId", "Connector")
+                        .IsUnique();
+
+                    b.ToTable("EducationOrganizationConnectorSettings");
+                });
+
             modelBuilder.Entity("OregonNexus.Broker.Domain.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("UserId");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("AllEducationOrganizations")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamp with time zone")
+                        .HasAnnotation("Relational:IsStored", true);
 
                     b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("uuid")
+                        .HasAnnotation("Relational:IsStored", true);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -279,7 +323,7 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UpdatedBy")
@@ -297,7 +341,7 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("UserRoleId");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedBy")
@@ -309,7 +353,7 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UpdatedBy")
@@ -320,9 +364,10 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EducationOrganizationId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("EducationOrganizationId", "UserId")
+                        .IsUnique();
 
                     b.ToTable("UserRoles", (string)null);
                 });
@@ -387,6 +432,15 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
                     b.Navigation("ParentOrganization");
                 });
 
+            modelBuilder.Entity("OregonNexus.Broker.Domain.EducationOrganizationConnectorSettings", b =>
+                {
+                    b.HasOne("OregonNexus.Broker.Domain.EducationOrganization", "EducationOrganization")
+                        .WithMany()
+                        .HasForeignKey("EducationOrganizationId");
+
+                    b.Navigation("EducationOrganization");
+                });
+
             modelBuilder.Entity("OregonNexus.Broker.Domain.User", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
@@ -398,7 +452,7 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
 
             modelBuilder.Entity("OregonNexus.Broker.Domain.UserRole", b =>
                 {
-                    b.HasOne("OregonNexus.Broker.Domain.EducationOrganization", "Education")
+                    b.HasOne("OregonNexus.Broker.Domain.EducationOrganization", "EducationOrganization")
                         .WithMany()
                         .HasForeignKey("EducationOrganizationId");
 
@@ -406,7 +460,7 @@ namespace OregonNexus.Broker.Data.Migrations.PostgreSQL.Migrations
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Education");
+                    b.Navigation("EducationOrganization");
 
                     b.Navigation("User");
                 });

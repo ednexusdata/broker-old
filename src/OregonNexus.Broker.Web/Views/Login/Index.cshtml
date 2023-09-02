@@ -1,28 +1,30 @@
 @{
     // Copyright: 2023 Education Nexus Oregon
     // Author: Makoa Jacobsen, makoa@makoajacobsen.com
+    Layout = "_Layout";
     ViewData["Title"] = "Login";
 }
 @using Microsoft.AspNetCore.Authentication
 @model IEnumerable<AuthenticationScheme>
 
-<div class="text-center">
-    <h2>Login to Broker</h2>
-    <ul>
-        @foreach(var i in Model)
-        {
-            <li>@i.Name | @i.DisplayName | @i.HandlerType</li>
-        }
-    </ul>
+<div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <img class="mx-auto h-48 w-auto" src="~/images/Final-Education-Nexus-ICON-png.png" alt="Education Nexus Oregon">
+    <h2 class="mt-2 text-center text-4xl font-bold tracking-tight text-gray-900">NEXUS</h2>
+    <h4 class="text-center text-xl tracking-tight text-gray-600">Student Records Transfer</h4>
+  </div>
 
-    <form id="external-account" asp-action="ExternalLogin" method="post" class="form-horizontal">
-        <div>
-            <p>
-                @foreach (var provider in Model)
-                {
-                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                }
-            </p>
-        </div>
-    </form>
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+        <form id="external-account" asp-action="ExternalLogin" method="post">
+            @foreach (var provider in Model)
+            {
+                <button type="submit" class="my-3 w-full justify-center rounded-md bg-white px-4 py-2 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                Sign in with @provider.DisplayName
+                </button>
+            }
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
